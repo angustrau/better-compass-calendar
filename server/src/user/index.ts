@@ -1,4 +1,4 @@
-import schema = require('./../schema');
+import schema = require('./../db/schema');
 
 /**
  * Gets user details
@@ -6,5 +6,5 @@ import schema = require('./../schema');
  * @param {number} id The id of the user to fetch details for
  */
 export const getDetails = async (id: number) => {
-    return await schema.User.getUser(id);
+    return await schema.user.getUser(id);
 }

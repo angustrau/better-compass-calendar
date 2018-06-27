@@ -10,7 +10,7 @@ declare module 'request' {
     }
 }
 
-class AuthToken {
+export default class AuthToken {
     jar: CookieJar;
     id: number;
     expires: Date;
@@ -54,5 +54,3 @@ class AuthToken {
         return new AuthToken(token.id, jar);
     }
 }
-
-export = AuthToken;

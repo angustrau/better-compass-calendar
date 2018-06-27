@@ -1,2 +1,1 @@
-import sqlite = require('./sqlite');
-export = sqlite;
+export * from './sqlite';

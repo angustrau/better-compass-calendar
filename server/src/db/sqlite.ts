@@ -1,9 +1,9 @@
-import sqlite = require('sqlite');
+import { open, Database } from 'sqlite';
 
-let db: sqlite.Database;
+let db: Database;
 
 export const initDB = async () => {
-    db = await sqlite.open('./db/database.sqlite', { promise: Promise });
+    db = await open('./db/database.sqlite', { promise: Promise });
     console.log('Initialised SQLite');
     db.migrate({ force: 'last', migrationsPath: './db/migrations' });
     console.log('Completed SQL migration');

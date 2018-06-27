@@ -1,5 +1,5 @@
 import request = require('./request');
-import AuthToken = require('./AuthToken');
+import AuthToken from './AuthToken';
 import errors = require('./errors');
 
 interface UserDetails {

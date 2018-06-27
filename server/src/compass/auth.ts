@@ -1,6 +1,6 @@
 import cheerio = require('cheerio');
 import request = require('./request');
-import AuthToken = require('./AuthToken');
+import AuthToken from './AuthToken';
 import errors = require('./errors');
 import { RequestResponse, RequestCallback } from 'request';
 
