@@ -1,0 +1,30 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Server",
+            "cwd": "${workspaceFolder}/server/src",
+            "program": "${workspaceFolder}/server/src/index.ts",
+            "env": {
+                "PORT": 3001
+            },
+            "sourceMaps": true,
+            "preLaunchTask": "server/ts-watch",
+            "outFiles": [
+                "${workspaceFolder}/server/build/**/*.js"
+            ]
+        },
+        {
+            "type": "chrome",
+            "request": "launch",
+            "name": "Launch Chrome against localhost",
+            "url": "http://localhost:3000",
+            "webRoot": "${workspaceFolder}"
+        }
+    ]
+}
