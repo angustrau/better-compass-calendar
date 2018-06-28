@@ -1,5 +1,5 @@
-import * as db from './../../db';
-import * as errors from './errors';
+import db = require('./../../db');
+import errors = require('./errors');
 
 export interface User {
     id: number;

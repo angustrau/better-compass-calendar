@@ -1,8 +1,8 @@
 import cheerio = require('cheerio');
 import request = require('./request');
-import AuthToken from './AuthToken';
+import AuthToken = require('./AuthToken');
 import errors = require('./errors');
-import { RequestResponse, RequestCallback } from 'request';
+import { RequestResponse } from 'request';
 
 /**
  * Authenticates with the Compass service

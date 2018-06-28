@@ -1,6 +1,7 @@
 import request = require('./request');
-import AuthToken from './AuthToken';
+import AuthToken = require('./AuthToken');
 import errors = require('./errors');
+import { Response } from 'request';
 
 interface UserDetails {
     id: number;
@@ -17,7 +18,7 @@ interface UserDetails {
  * @returns {Promise<UserDetails>}
  */
 export const getDetails = async (id: number, authToken: AuthToken): Promise<UserDetails> => {
-    let response = await request('/Services/User.svc/GetUserDetailsBlobByUserId?sessionstate=readonly', {
+    let response: Response = await request('/Services/User.svc/GetUserDetailsBlobByUserId?sessionstate=readonly', {
         method: 'POST',
         jar: authToken.jar,
         qs: {

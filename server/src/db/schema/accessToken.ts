@@ -1,6 +1,6 @@
-import * as db from './../../db';
-import * as errors from './errors';
-import AuthToken from './../../compass/AuthToken';
+import db = require('./../../db');
+import errors = require('./errors');
+import AuthToken = require('./../../compass/AuthToken');
 
 export interface AccessToken {
     token: string;
