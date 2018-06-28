@@ -58,12 +58,3 @@ export const saveToken = async (token: AccessToken) => {
 export const revokeToken = async (accessToken: string) => {
     await db.run('DELETE FROM AuthTokens WHERE token = $1', accessToken);
 }
-
-/**
- * Revokes all tokens associated with a user
- * @async
- * @param {number} id
- */
-export const revokeTokensForUser = async (id: number) => {
-    await db.run('DELETE FROM AuthTokens WHERE user_id = $1', id)
-}

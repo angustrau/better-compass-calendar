@@ -13,7 +13,7 @@ router.get('/token', async (req, res, next) => {
         // Post-login tasks
         await Promise.all([
             // Ensure that the user is registered
-            user.registerUser(token),
+            user.registerUser(token.userId, token),
             // Ensure that locations are cached
             location.cacheLocations(token)
         ]);

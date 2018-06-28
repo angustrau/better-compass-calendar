@@ -4,8 +4,10 @@ let db: Database;
 
 export const initDB = async () => {
     db = await open('./db/database.sqlite', { promise: Promise });
+    // Enable foreign key constraint support
+    await db.run('PRAGMA foreign_keys = ON');
     console.log('Initialised SQLite');
-    db.migrate({ force: 'last', migrationsPath: './db/migrations' });
+    await db.migrate({ force: 'last', migrationsPath: './db/migrations' });
     console.log('Completed SQL migration');
 }
 
