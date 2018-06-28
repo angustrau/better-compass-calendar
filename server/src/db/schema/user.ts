@@ -43,3 +43,12 @@ export const saveUser = async(user: User) => {
         user.email
     );
 }
+
+/**
+ * Deletes a BCC user from the DB
+ * @async
+ * @param {number} id 
+ */
+export const deleteUser = async(id: number) => {
+    await db.run('DELETE FROM Users WHERE id = $1', id);
+}

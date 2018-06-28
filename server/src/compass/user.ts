@@ -21,9 +21,6 @@ export const getDetails = async (id: number, authToken: AuthToken): Promise<User
     let response: Response = await request('/Services/User.svc/GetUserDetailsBlobByUserId?sessionstate=readonly', {
         method: 'POST',
         jar: authToken.jar,
-        qs: {
-            _dc: Date.now()
-        },
         json: {
             id: id,
             targetUserId: id

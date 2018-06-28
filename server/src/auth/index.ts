@@ -3,6 +3,7 @@ import UIDGenerator = require('uid-generator');
 const uidgen = new UIDGenerator();
 import compass = require('./../compass');
 import schema = require('./../db/schema');
+import { AccessToken } from '../db/schema/AccessToken';
 
 export const errors = {
     INVALID_TOKEN: 'Invalid authorisation token'
@@ -14,43 +15,27 @@ export const errors = {
  * @param {string} username 
  * @param {string} password 
  */
-export const genToken = async (username: string, password: string) => {
+export const generateToken = async (username: string, password: string) => {
     let authToken = await compass.auth.login(username, password);
-
-    let user: schema.user.User;
-    try {
-        user = await schema.user.getUser(authToken.id);
-    } catch (error) {
-        if (error === schema.errors.USER_NOT_FOUND) {
-            const { id, displayCode, fullName, email } = await compass.user.getDetails(authToken.id, authToken);
-
-            await schema.user.saveUser({
-                id: id,
-                displayCode: displayCode,
-                fullName: fullName,
-                email: email
-            });
-            user = await schema.user.getUser(id);
-        } else {
-            throw error;
-        }
-    }
-
-    let token: schema.accessToken.AccessToken = {
+    let token: AccessToken = {
         token: await uidgen.generate(), 
         expires: authToken.expires, 
-        userId: user.id, 
+        userId: authToken.id, 
         compassToken: authToken
     }
-
     await schema.accessToken.saveToken(token);
 
     return token;
 }
 
+export const revokeToken = async (token: AccessToken) => {
+    await schema.accessToken.revokeToken(token.token);
+}
+
 declare module 'express-serve-static-core' {
     interface Request {
         user: schema.user.User;
+        token: AccessToken;
     }
 }
 
@@ -62,7 +47,7 @@ declare module 'express-serve-static-core' {
  * @param next 
  */
 export const authenticate = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const accessToken: string|undefined = req.get('Authorization');
+    const accessToken: string | undefined = req.get('Authorization');
 
     if (!accessToken) {
         next(errors.INVALID_TOKEN);
@@ -70,8 +55,8 @@ export const authenticate = async (req: express.Request, res: express.Response, 
     }
 
     try {
-        const token = await schema.accessToken.getToken(accessToken);
-        req.user = await schema.user.getUser(token.userId);
+        req.token = await schema.accessToken.getToken(accessToken);
+        req.user = await schema.user.getUser(req.token.userId);
     } catch (error) {
         switch (error) {
             case schema.errors.TOKEN_NOT_FOUND:

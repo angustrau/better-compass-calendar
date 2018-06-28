@@ -16,9 +16,16 @@ CREATE TABLE Users (
     email         TEXT    NOT NULL
 );
 
+CREATE TABLE Locations (
+    id         INTEGER PRIMARY KEY,
+    full_name  TEXT    NOT NULL,
+    short_name TEXT    NOT NULL
+);
+
 --------------------------------------------------------------------------------
 -- Down
 --------------------------------------------------------------------------------
 
 DROP TABLE AuthTokens;
 DROP TABLE Users;
+DROP TABLE Locations;
