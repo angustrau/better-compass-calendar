@@ -1,26 +1,25 @@
 import express = require('express');
 const router = express.Router();
 import auth = require('./../../auth');
-import user = require('./../../user');
 import location = require('./../../location');
+import events = require('./../../events');
 
 router.get('/token', async (req, res, next) => {
-    let { username, password } = req.body;
-
     try {
+        let { username, password } = req.body;
+        if (!username || !password || typeof(username) !== 'string' || typeof(password) !== 'string') {
+            throw 'Invalid input';
+        }
+
         const token = await auth.generateToken(username, password)
         
         // Post-login tasks
-        await Promise.all([
-            // Ensure that the user is registered
-            user.registerUser(token.userId, token),
-            // Ensure that locations are cached
-            location.cacheLocations(token)
-        ]);
-        
+        await location.cacheLocations(token);
+        await events.cacheEvents(token);
+
         res.json({
             token: token.token,
-             expires: token.expires 
+            expires: token.expires 
         });
     } catch (error) {
         next(error);

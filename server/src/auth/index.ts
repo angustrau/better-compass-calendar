@@ -3,6 +3,7 @@ import UIDGenerator = require('uid-generator');
 const uidgen = new UIDGenerator();
 import compass = require('./../compass');
 import schema = require('./../db/schema');
+import user = require('./../user');
 import { AccessToken } from '../db/schema/AccessToken';
 
 export const errors = {
@@ -23,6 +24,8 @@ export const generateToken = async (username: string, password: string) => {
         userId: authToken.id, 
         compassToken: authToken
     }
+
+    await user.registerUser(token.userId, token);
     await schema.accessToken.saveToken(token);
 
     return token;
@@ -47,14 +50,13 @@ declare module 'express-serve-static-core' {
  * @param next 
  */
 export const authenticate = async (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const accessToken: string | undefined = req.get('Authorization');
-
-    if (!accessToken) {
-        next(errors.INVALID_TOKEN);
-        return;
-    }
-
     try {
+        const accessToken: string | undefined = req.get('Authorization');
+
+        if (!accessToken || typeof(accessToken) !== 'string') {
+            throw errors.INVALID_TOKEN;
+        }
+
         req.token = await schema.accessToken.getToken(accessToken);
         req.user = await schema.user.getUser(req.token.userId);
     } catch (error) {

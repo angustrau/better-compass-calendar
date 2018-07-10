@@ -2,7 +2,6 @@ import cheerio = require('cheerio');
 import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
-import { RequestResponse } from 'request';
 
 /**
  * Authenticates with the Compass service
@@ -16,7 +15,7 @@ export const login = async (username: string, password: string): Promise<AuthTok
 
     // Request the login page to establish a session cookie and get generated login form data
     // Parses the page into a jQuery-like function
-    let loginPage: RequestResponse = await request('/login.aspx?sessionstate=disabled', {
+    let loginPage = await request('/login.aspx?sessionstate=disabled', {
         jar: cookieJar
     });
     let $loginPage = cheerio.load(loginPage.body);
@@ -31,7 +30,7 @@ export const login = async (username: string, password: string): Promise<AuthTok
         '__VIEWSTATEGENERATOR': $loginPage('#__VIEWSTATEGENERATOR').val()
     }
 
-    let response: RequestResponse = await request('/login.aspx?sessionstate=disabled', {
+    let response = await request('/login.aspx?sessionstate=disabled', {
         form: data,
         method: 'POST',
         jar: cookieJar

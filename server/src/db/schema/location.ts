@@ -7,8 +7,19 @@ export interface Location {
     shortName: string;
 }
 
-export const getLocation = async (id: number): Promise<Location> => {
-    const data = await db.get('SELECT id, full_name, short_name FROM Locations WHERE id = $1', id);
+/**
+ * Gets location data from the DB
+ * @async
+ * @param {number | string} x Location ID or short name
+ * @returns {Promise<Location>}
+ */
+export const getLocation = async (x: number | string): Promise<Location> => {
+    let data;
+    if (typeof(x) === 'number') {
+        data = await db.get('SELECT id, full_name, short_name FROM Locations WHERE id = $1', x);
+    } else if (typeof(x) === 'string') {
+        data = await db.get('SELECT id, full_name, short_name FROM Locations WHERE short_name = $1', x);
+    }
 
     if (!data) {
         throw errors.LOCATION_NOT_FOUND;
@@ -21,15 +32,16 @@ export const getLocation = async (id: number): Promise<Location> => {
     }
 }
 
+/**
+ * Saves location data into the DB
+ * @async
+ * @param {Location} location 
+ */
 export const saveLocation = async (location: Location) => {
     await db.run(
         'REPLACE INTO Locations (id, full_name, short_name) VALUES ($1,$2,$3)',
         location.id,
         location.fullName,
         location.shortName
-    )
-}
-
-export const clearLocations = async () => {
-    await db.run('DELETE FROM Locations');
+    );
 }

@@ -1,13 +1,28 @@
 import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
-import { Response } from 'request';
 
 interface UserDetails {
-    id: number;
-    displayCode: string;
-    fullName: string;
-    email: string;
+    '__type': string | null;
+    'userDetails': string | null;
+    'userDisplayCode': string | null;
+    'userEmail': string | null;
+    'userFlags': Array<any> | null;
+    'userFormGroup': string | null;
+    'userFullName': string | null;
+    'userHouse': string | null;
+    'userId': number | null;
+    'userPhoneExtension': number | null;
+    'userPhotoPath': string | null;
+    'userPreferredName': string | null;
+    'userRole': number | null;
+    'userSchoolId': string | null;
+    'userSchoolURL': string | null;
+    'userSquarePhotoPath': string | null;
+    'userSussiID': string | null;
+    'userVSN': string | null;
+    'userYearLevel': string | null;
+    'userYearLevelId': number | null;
 }
 
 /**
@@ -18,7 +33,7 @@ interface UserDetails {
  * @returns {Promise<UserDetails>}
  */
 export const getDetails = async (id: number, authToken: AuthToken): Promise<UserDetails> => {
-    let response: Response = await request('/Services/User.svc/GetUserDetailsBlobByUserId?sessionstate=readonly', {
+    let response = await request('/Services/User.svc/GetUserDetailsBlobByUserId?sessionstate=readonly', {
         method: 'POST',
         jar: authToken.jar,
         json: {
@@ -32,16 +47,8 @@ export const getDetails = async (id: number, authToken: AuthToken): Promise<User
             throw errors.ACCESS_DENIED;
         }
 
-        let { userId, userDisplayCode, userFullName, userEmail } = response.body.d;
-
-        return {
-            id: userId,
-            displayCode: userDisplayCode,
-            fullName: userFullName,
-            email: userEmail
-        }
+        return response.body.d;
     } else {
         throw errors.INVALID_TOKEN;
     }
-    
 }

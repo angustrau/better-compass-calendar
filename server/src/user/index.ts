@@ -16,13 +16,13 @@ export const registerUser = async (id: number, token: AccessToken): Promise<User
         user = await schema.user.getUser(id);
     } catch (error) {
         if (error === schema.errors.USER_NOT_FOUND) {
-            const { displayCode, fullName, email } = await compass.user.getDetails(id, token.compassToken);
+            const { userDisplayCode, userFullName, userEmail } = await compass.user.getDetails(id, token.compassToken);
 
             user = {
                 id: id,
-                displayCode: displayCode,
-                fullName: fullName,
-                email: email
+                displayCode: userDisplayCode || '',
+                fullName: userFullName || '',
+                email: userEmail || ''
             }
             await schema.user.saveUser(user);
         } else {

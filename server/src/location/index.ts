@@ -20,7 +20,6 @@ export const cacheLocations = async (accessToken: AccessToken) => {
             shortName: x.roomName
         }
     });
-    await schema.location.clearLocations();
     await Promise.all(
         locations.map(x => schema.location.saveLocation(x))
     );

@@ -1,7 +1,6 @@
 import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
-import { Response } from 'request';
 
 interface CompassLocation {
     '__type': string;
@@ -19,7 +18,7 @@ interface CompassLocation {
  * @returns {Promise<CompassLocation[]>}
  */
 export const getAllLocations = async (authToken: AuthToken): Promise<CompassLocation[]> => {
-    let response: Response = await request('/Services/ReferenceData.svc/GetAllLocations?sessionstate=readonly', {
+    let response = await request('/Services/ReferenceData.svc/GetAllLocations?sessionstate=readonly', {
         method: 'POST',
         jar: authToken.jar,
         json: {}
