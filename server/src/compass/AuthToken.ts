@@ -1,8 +1,7 @@
-import request = require('./request');
 import tough = require('tough-cookie');
 import config = require('./../../config');
 import errors = require('./errors');
-import { CookieJar } from 'request';
+import request = require('request');
 
 declare module 'request' {
     interface CookieJar {
@@ -11,7 +10,7 @@ declare module 'request' {
 }
 
 class AuthToken {
-    jar: CookieJar;
+    jar: request.CookieJar;
     id: number;
     expires: Date;
 
@@ -20,7 +19,7 @@ class AuthToken {
      * @param {number}    id  - The id of the user connected to this auth token
      * @param {CookieJar} jar - A RequestJS cookie jar 
      */
-    constructor(id: number, jar: CookieJar) {
+    constructor(id: number, jar: request.CookieJar) {
         this.jar = jar;
         this.id = id;
 

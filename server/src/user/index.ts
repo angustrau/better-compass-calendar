@@ -1,5 +1,8 @@
 import schema = require('./../db/schema');
 import compass = require('./../compass');
+import events = require('./../events');
+import subscriptions = require('./../subscriptions');
+import location = require('./../location');
 import { AccessToken } from '../db/schema/AccessToken';
 import { User } from '../db/schema/User';
 
@@ -25,6 +28,14 @@ export const registerUser = async (id: number, token: AccessToken): Promise<User
                 email: userEmail || ''
             }
             await schema.user.saveUser(user);
+
+            if (id === token.userId) {
+                await location.cacheLocations(token);
+                await events.cacheEventsYear(token);
+                const classes = await compass.user.getClasses(token.compassToken);
+                //const classes = await compass.user.getActivities(token.compassToken);
+                await Promise.all(classes.map(activity => subscriptions.subscribe(user, activity)));
+            }
         } else {
             throw error;
         }

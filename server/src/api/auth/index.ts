@@ -14,8 +14,7 @@ router.get('/token', async (req, res, next) => {
         const token = await auth.generateToken(username, password)
         
         // Post-login tasks
-        await location.cacheLocations(token);
-        await events.cacheEvents(token);
+        await events.cacheEventsFortnight(token);
 
         res.json({
             token: token.token,

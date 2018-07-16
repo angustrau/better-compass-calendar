@@ -1,6 +1,7 @@
 import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
+import cheerio = require('cheerio');
 
 interface UserDetails {
     '__type': string | null;
@@ -23,6 +24,33 @@ interface UserDetails {
     'userVSN': string | null;
     'userYearLevel': string | null;
     'userYearLevelId': number | null;
+}
+
+interface ClassDetails {
+    '__type': string;
+    'attendanceModeDefault': number | null;
+    'campusId': number | null;
+    'checkInEnabledDefault': number;
+    'customLocation': null;
+    'description': string | null;
+    'extendedStatusId': number | null;
+    'facultyName': string;
+    'finish': Date;
+    'haparaSyncEnabled': boolean;
+    'id': number;
+    'importIdentifier': string;
+    'layerAllowsImport': boolean;
+    'layerId': number;
+    'locationId': number | null;
+    'managerId': number | null;
+    'managerImportIdentifier': string | null;
+    'name': string;
+    'periodStructureId': number;
+    'start': Date;
+    'subjectId': number;
+    'subjectImportIdentifier': string;
+    'subjectLongName': string;
+    'yearLevelShortName': string
 }
 
 /**
@@ -51,4 +79,61 @@ export const getDetails = async (id: number, authToken: AuthToken): Promise<User
     } else {
         throw errors.INVALID_TOKEN;
     }
+}
+
+export const getClasses = async (authToken: AuthToken): Promise<ClassDetails[]> => {
+    let response = await request('/Services/Subjects.svc/GetStandardClassesOfUserInAcademicGroup', {
+        method: 'POST',
+        jar: authToken.jar,
+        json: {
+            academicGroupId: -1,
+            userId: authToken.id,
+            page: 1,
+            start: 0,
+            limit: 50
+        }
+    });
+
+    if (response.statusCode === 200) {
+        return (response.body.d.data as Array<any>).map((x): ClassDetails => {
+            return {
+                ...x,
+                start: new Date(x.start),
+                finish: new Date(x.finish)
+            }
+        });
+    } else {
+        throw errors.INVALID_TOKEN;
+    }
+}
+
+interface ActivityDetails {
+    id: number;
+}
+
+export const getActivities = async (authToken: AuthToken): Promise<ActivityDetails[]> => {
+    let response = await request('/', {
+        method: 'GET',
+        jar: authToken.jar
+    });
+
+    if (response.statusCode === 200) {
+        let $ = cheerio.load(response.body);
+
+        const activities = $('a[href^="/Organise/Activities/Activity.aspx#activity/"]').map((index, element) => {
+            const activityMatch = element.attribs.href.match(/^\/Organise\/Activities\/Activity\.aspx#activity\/(\d+)$/);
+            if (activityMatch) {
+                return activityMatch[1];
+            }
+        }).get().map((x): ActivityDetails => {
+            return {
+                id: parseInt(x)
+            }
+        });
+
+        return activities;
+    } else {
+        throw errors.INVALID_TOKEN;
+    }
+    
 }

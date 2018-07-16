@@ -1,6 +1,5 @@
 import request = require('./request');
 import AuthToken = require('./AuthToken');
-import leftPad = require('./../utils/leftPad');
 import errors = require('./errors');
 
 export interface EventDetails {
@@ -28,8 +27,8 @@ export interface EventDetails {
 
 const toDateString = (date: Date) => {
     const year = date.getFullYear();
-    const month = leftPad((date.getMonth() + 1).toString(), '0', 2);
-    const _date = leftPad(date.getDate().toString(), '0', 2);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0')
+    const _date = date.getDate().toString().padStart(2, '0')
     return `${year}-${month}-${_date}`;
 }
 
