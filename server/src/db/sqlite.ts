@@ -1,10 +1,15 @@
 import { open, Database } from 'sqlite';
+import config = require('./../../config');
 
 let db: Database;
 
 export const initDB = async () => {
     db = await open('./db/database.sqlite', { promise: Promise });
-    await db.migrate({ force: 'last', migrationsPath: './db/migrations' });
+    console.log('Opened SQLite database');
+    await db.migrate({
+        force: config.environment === 'dev' ? 'last' : undefined, 
+        migrationsPath: './db/migrations'
+    });
     console.log('Completed SQL migration');
     // Enable foreign key constraint support
     await db.run('PRAGMA foreign_keys = ON');

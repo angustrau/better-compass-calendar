@@ -41,12 +41,14 @@ CREATE TABLE Events (
 );
 
 CREATE VIRTUAL TABLE EventsIndex USING fts5 (
-    id,
+    id UNINDEXED,
     title,
     description,
+    location_id,
     location_short,
     location_full,
-    manager,
+    manager_id,
+    manager_full,
     tokenize=porter
 );
 
@@ -55,16 +57,20 @@ CREATE TRIGGER Events_Insert AFTER INSERT ON Events BEGIN
         id, 
         title, 
         description,
+        location_id,
         location_short,
         location_full,
-        manager
+        manager_id,
+        manager_full
     )
     VALUES (
         new.id,
         new.title,
         new.description,
+        new.location_id,
         (SELECT short_name FROM Locations WHERE id = new.location_id),
         (SELECT full_name FROM Locations WHERE id = new.location_id),
+        new.manager_id,
         (SELECT full_name FROM Users WHERE id = new.manager_id)
     );
 END;
@@ -73,9 +79,11 @@ CREATE TRIGGER Events_Update UPDATE OF hash ON Events BEGIN
     UPDATE EventsIndex SET 
         title = new.title,
         description = new.description,
+        location_id = new.location_id,
         location_short = (SELECT short_name FROM Locations WHERE id = new.location_id),
         location_full = (SELECT full_name FROM Locations WHERE id = new.location_id),
-        manager = (SELECT full_name FROM Users WHERE id = new.manager_id)
+        manager_id = new.manager_id,
+        manager_full = (SELECT full_name FROM Users WHERE id = new.manager_id)
     WHERE id = old.id;
 END;
 
@@ -85,7 +93,8 @@ END;
 
 CREATE TABLE Subscriptions (
     user_id     INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
-    activity_id INTEGER NOT NULL REFERENCES Activities(id) ON DELETE CASCADE
+    activity_id INTEGER NOT NULL REFERENCES Activities(id) ON DELETE CASCADE,
+    PRIMARY KEY(user_id, activity_id)
 );
 
 CREATE TABLE RequestLog (
