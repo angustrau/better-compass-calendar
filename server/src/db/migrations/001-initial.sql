@@ -12,7 +12,7 @@ CREATE TABLE Users (
 CREATE TABLE AuthTokens (
     token         TEXT    PRIMARY KEY,
     expires       INTEGER NOT NULL,
-    user_id       TEXT    NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
+    user_id       INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
     compass_token TEXT    NOT NULL
 );
 

@@ -5,14 +5,10 @@ import activities = require('./../activities');
 import objectHash = require('object-hash');
 import { AccessToken } from '../db/schema/AccessToken';
 import { EventDetails } from '../compass/event';
-import { Event } from '../db/schema/event';
+import { Event, Query } from '../db/schema/event';
 
 export const errors = {
     INVALID_QUERY: 'Query is not valid'
-}
-
-export interface Query extends schema.event.Query {
-    subscribed: boolean | undefined;
 }
 
 const hashEvent = (event: EventDetails): string => {
@@ -53,7 +49,10 @@ const saveEvent = async (event: EventDetails) => {
 }
 
 export const query = async (query: Query, accessToken: AccessToken) => {
-    // TODO implement subscription filtering
+    if (query.subscribedUserId && query.subscribedUserId !== accessToken.userId) {
+        throw errors.INVALID_QUERY;
+    }
+
     return await schema.event.queryEvents(query);
 }
 

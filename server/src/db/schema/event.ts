@@ -17,15 +17,16 @@ export interface Event {
 }
 
 export interface Query {
-    keywords: string | undefined;
-    title: string | undefined;
-    location: string | undefined;
-    locationId: number | undefined;
-    manager: string | undefined;
-    managerId: number | undefined;
-    after: Date | undefined;
-    before: Date | undefined;
-    orderBy: 'newest' | 'oldest' | 'relevance';
+    keywords?: string;
+    title?: string;
+    location?: string;
+    locationId?: number;
+    manager?: string;
+    managerId?: number;
+    after?: Date;
+    before?: Date;
+    orderBy?: 'newest' | 'oldest' | 'relevance';
+    subscribedUserId?: number;
 }
 
 const columns = 'id, title, description, activity_id, location_id, manager_id, all_day, cancelled, start_time, end_time, hash';
@@ -94,9 +95,9 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
     if (query.manager)    filters.push(`(manager_full : ${escape(query.manager)})`);
     if (query.managerId)  filters.push(`(manager_id : ${escape(query.managerId)})`);
 
-    let sql = `SELECT ${columns} from Events WHERE id IN (SELECT id FROM EventsIndex Where EventsIndex MATCH '`
-    sql += filters.join(' AND ');
-    sql += `' ORDER BY rank)`;
+    let sql = `SELECT ${columns} from Events WHERE 1=1`;
+    sql += filters.length > 0 ? ` AND id IN (SELECT id FROM EventsIndex WHERE EventsIndex MATCH '${filters.join(' AND ')}' ORDER BY rank)` : '';
+    sql += query.subscribedUserId ? ` AND activity_id IN (SELECT activity_id FROM Subscriptions WHERE user_id = $subscribedUserId)` : '';
     sql += query.after  ? ` AND (start_time >= $after)` : '';
     sql += query.before ? ` AND (end_time <= $before)` : '';
     sql += query.orderBy === 'newest' ? ' ORDER BY start_time DESC' : query.orderBy === 'oldest' ? ' ORDER BY start_time ASC' : '';
@@ -104,6 +105,7 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
     const results = await db.all(
         sql, 
         {
+            $subscribedUserId: query.subscribedUserId || undefined,
             $after: query.after ? query.after.getTime() : undefined,
             $before: query.before ? query.before.getTime() : undefined
         }
