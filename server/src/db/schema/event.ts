@@ -31,18 +31,7 @@ export interface Query {
 
 const columns = 'id, title, description, activity_id, location_id, manager_id, all_day, cancelled, start_time, end_time, hash';
 
-/**
- * Retrieves event data from the DB
- * @async
- * @param {string} id
- * @returns {Promise<Event>}
- */
-export const getEvent = async (id: string): Promise<Event> => {
-    const data = await db.get(`SELECT ${columns} FROM Events WHERE id = $1`, id);
-    if (!data) {
-        throw errors.EVENT_NOT_FOUND;
-    }
-
+const formatData = (data: any): Event => {
     return {
         id: data.id,
         title: data.title,
@@ -56,6 +45,21 @@ export const getEvent = async (id: string): Promise<Event> => {
         endTime: new Date(data.end_time),
         hash: data.hash
     }
+}
+
+/**
+ * Retrieves event data from the DB
+ * @async
+ * @param {string} id
+ * @returns {Promise<Event>}
+ */
+export const getEvent = async (id: string): Promise<Event> => {
+    const data = await db.get(`SELECT ${columns} FROM Events WHERE id = $1`, id);
+    if (!data) {
+        throw errors.EVENT_NOT_FOUND;
+    }
+
+    return formatData(data);
 }
 
 /**
@@ -111,5 +115,5 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
         }
     );
 
-    return results;
+    return results.map(result => formatData(result));
 }

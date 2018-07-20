@@ -1,11 +1,22 @@
 {
-  "name": "client",
+  "name": "bcc-client",
   "version": "0.1.0",
+  "description": "Client component of Better Compass Calendar",
+  "main": "src/index.js",
+  "author": "Angus Trau",
+  "license": "MIT",
   "private": true,
+  "proxy": "http://localhost:3001",
   "dependencies": {
+    "bootstrap": "^4.1.2",
+    "moment": "^2.22.2",
     "react": "^16.4.1",
+    "react-big-calendar": "^0.19.2",
+    "react-contenteditable": "^2.1.0",
     "react-dom": "^16.4.1",
-    "react-scripts-ts": "2.16.0"
+    "react-router-dom": "^4.3.1",
+    "react-scripts-ts": "2.16.0",
+    "reactstrap": "^6.3.0"
   },
   "scripts": {
     "start": "react-scripts-ts start",
@@ -15,9 +26,13 @@
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",
+    "@types/moment": "^2.13.0",
     "@types/node": "^10.5.2",
     "@types/react": "^16.4.6",
+    "@types/react-big-calendar": "^0.18.1",
     "@types/react-dom": "^16.0.6",
+    "@types/react-router-dom": "^4.2.7",
+    "@types/reactstrap": "^6.0.0",
     "typescript": "^2.9.2"
   }
 }

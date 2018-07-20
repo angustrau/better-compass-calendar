@@ -58,6 +58,7 @@ let _request = async (uri: string, options: rr.RequestRetryOptions): Promise<Res
     return new Promise<Response>((resolve, reject) => {
         rr(uri, {...defaults, ...options}, (err, res, body) => {
             if (err) reject(err);
+            if (!res) return;
 
             console.log(
                 res.request.method,

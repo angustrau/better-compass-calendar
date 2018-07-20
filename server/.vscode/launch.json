@@ -7,8 +7,18 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceFolder}\\index.js"
+            "name": "Launch Server",
+            "cwd": "${workspaceFolder}/src",
+            "program": "${workspaceFolder}/src/index.ts",
+            "env": {
+                "PORT": "3001",
+                "NODE_ENV": "dev"
+            },
+            "sourceMaps": true,
+            "preLaunchTask": "server/ts-watch",
+            "outFiles": [
+                "${workspaceFolder}/build/**/*.js"
+            ]
         }
     ]
 }

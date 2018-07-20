@@ -1,0 +1,9 @@
+.IndexRoute-Root{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.IndexRoute-Body {
+    flex: 1;
+}

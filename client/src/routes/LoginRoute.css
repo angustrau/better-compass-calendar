@@ -1,0 +1,68 @@
+.LoginRoute-Root {
+    padding: 0;
+}
+
+.LoginRoute-Root, .LoginRoute-Root .col, .LoginRoute-Root .row {
+    height: 100%;
+}
+
+.LoginRoute-InfoPane {
+    display: flex;
+    flex-direction: column;
+    padding-left: 8px;
+    padding-right: 8px;
+    background-color: #F2F2F2;   
+    user-select: none;
+}
+
+.LoginRoute-InfoPane-Branding {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.LoginRoute-InfoPane-Branding svg {
+    width: 70%;
+    padding-bottom: 16px;
+    fill: #212121;
+}
+
+.LoginRoute-InfoPane-Branding h2 {
+    color: #212121;
+}
+
+.LoginRoute-InfoPane-Branding h3 {
+    color: #757575;
+}
+
+.LoginRoute-InfoPane-Disclaimer {
+    padding: 8px;
+    text-align: center;
+    color: #BDBDBD;
+}
+
+.LoginRoute-InputPane {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2F80ED;
+}
+
+.LoginRoute-InputPane > * {
+    width: 80%;
+    max-width: 500px;
+}
+
+.LoginRoute-InputPane .input-group {
+    padding-bottom: 8px;
+}
+
+.LoginRoute-InputPane-LoggingIn {
+    color: white;
+    text-align: center;
+    user-select: none;
+}

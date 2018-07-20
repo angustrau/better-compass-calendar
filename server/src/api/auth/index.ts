@@ -4,7 +4,7 @@ import auth = require('./../../auth');
 import location = require('./../../location');
 import events = require('./../../events');
 
-router.get('/token', async (req, res, next) => {
+router.post('/token', async (req, res, next) => {
     try {
         let { username, password } = req.body;
         if (!username || !password || typeof(username) !== 'string' || typeof(password) !== 'string') {
