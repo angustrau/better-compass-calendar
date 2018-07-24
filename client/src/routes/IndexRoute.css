@@ -7,3 +7,17 @@
 .IndexRoute-Body {
     flex: 1;
 }
+
+.IndexRoute-Controls {
+    display: inline-block;
+    width: 100%;
+    padding: 8px;
+}
+
+.IndexRoute-ControlsLeft {
+    display: inline-flex;
+}
+
+.IndexRoute-ControlsLeft > * {
+    padding-right: 8px;
+}

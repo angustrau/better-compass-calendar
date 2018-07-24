@@ -7,8 +7,6 @@ import {
 } from 'react-router-dom';
 import './App.css';
 import * as auth from './auth';
-import * as user from './user';
-
 import * as routes from './routes';
 
 interface IState {
@@ -33,9 +31,6 @@ class App extends React.Component<object, IState> {
 		auth.events.addEventListener('logout', () => {
 			this.setState({ authenticated: false });
 		});
-		auth.init();
-
-		user.init();
 	}
 
   	public render() {
@@ -59,6 +54,7 @@ class App extends React.Component<object, IState> {
 		return (
 			<Switch>
 				<Route exact={true} path='/' component={ routes.IndexRoute } />
+				<Route path='/f/:filter?' component={routes.IndexRoute} />
 			</Switch>
 		);
 	}

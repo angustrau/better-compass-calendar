@@ -57,11 +57,15 @@ export const getEventsByUser = async (id: number, startDate: Date, endDate: Date
     });
 
     if (response.statusCode === 200) {
-        return response.body.d.map(x => {
+        return response.body.d.map((x): EventDetails => {
+            const start = new Date(x.start);
+            const finish = new Date(x.finish);
+
             return {
                 ...x,
-                start: new Date(x.start),
-                finish: new Date(x.finish)
+                start,
+                finish,
+                allDay: (finish.getTime() - start.getTime()) / 3.6e6 > 7
             }
         });
     } else {

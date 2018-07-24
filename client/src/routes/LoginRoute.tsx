@@ -76,7 +76,7 @@ class LoginRoute extends React.Component<object, IState> {
                 <InputGroup>
                     <Input placeholder='username' invalid={this.state.invalidUserPass} name='username' innerRef={this.refUsername} />
                 </InputGroup>
-                <InputGroup>  
+                <InputGroup>
                     <Input placeholder='password' invalid={this.state.invalidUserPass} name='password' type='password' innerRef={this.refPassword} />
                     <InputGroupAddon addonType='append'>
                         <Button color='secondary' onClick={this.login}>Go</Button>

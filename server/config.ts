@@ -1,6 +1,7 @@
 export = {
     port: process.env.PORT || 80,
     environment: process.env.NODE_ENV || 'production',
+    neverMigrateDB: true,
     requestsPerSecond: 10,
     proxy: {
         address: '127.0.0.1',

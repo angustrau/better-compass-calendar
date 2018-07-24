@@ -20,4 +20,14 @@ router.delete('/', auth.authenticate, async (req, res, next) => {
     }
 });
 
+router.get('/managers', auth.authenticate, async (req, res, next) => {
+    try {
+        res.json({
+            managers: await user.getManagers()
+        });
+    } catch (error) {
+        next(error);
+    }
+})
+
 export = router;

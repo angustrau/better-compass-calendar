@@ -6,7 +6,9 @@ import { Query } from '../../db/schema/event';
 
 router.post('/query', auth.authenticate, async (req, res, next) => {
     try {
-        res.json(await events.query(req.body as Query, req.token));
+        res.json({
+            events: await events.query(req.body as Query, req.token)
+        });
     } catch (error) {
         next(error);
     }

@@ -24,13 +24,13 @@ export interface IQuery {
     managerId?: number;
     after?: Date;
     before?: Date;
-    orderBy?: 'newest' | 'oldest' | 'relevance';
-    subscribedUserId?: number;
+    orderBy?: 'newest' | 'oldest' | 'relevance';    subscribedUserId?: number;
+
 }
 
 export const queryEvents = async (query: IQuery, token: IAccessToken) => {
-    const response: any[] = await apiRequest('POST', '/events/query', query, token);
-    return response.map((event): IEvent => {
+    const response: { events: any[] } = await apiRequest('POST', '/events/query', query, token);
+    return response.events.map((event): IEvent => {
         return {
             ...event,
             endTime: new Date(event.endTime),

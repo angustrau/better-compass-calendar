@@ -1,3 +1,17 @@
 .BCCNavBar .navbar-brand {
     width: 40px;
 }
+
+.BCCNavBar-Items {
+    margin-left: auto;
+}
+
+.BCCNavBar-Search {
+    display: flex;
+    align-items: center;
+    padding-right: 8px;
+}
+
+.BCCNavBar-Search > .input-group {
+    flex-wrap: nowrap;
+}

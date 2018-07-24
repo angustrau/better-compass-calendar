@@ -9,7 +9,8 @@ let user: api.IUserDetails = {
     id: 0,
     displayCode: '',
     fullName: '',
-    email: ''
+    email: '',
+    isManager: false
 };
 
 const updateUserDetails = async () => {
@@ -19,11 +20,22 @@ const updateUserDetails = async () => {
     }
 }
 
+let managers: api.IUserDetails[] = [];
+const updateManagers = async () => {
+    if (auth.isAuthenticated()) {
+        managers = await api.getManagers(auth.getToken()!);
+    }
+}
+
 export const init = async () => {
-    auth.events.addEventListener('login', async () => {
-        await updateUserDetails();
+    auth.events.addEventListener('login', () => {
+        updateUserDetails();
+        updateManagers();
     });
-    await updateUserDetails();
+    updateUserDetails();
+    updateManagers();
 }
 
 export const getUser = () => user;
+export const getAllManagers = () => managers;
+

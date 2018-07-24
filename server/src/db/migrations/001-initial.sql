@@ -6,7 +6,8 @@ CREATE TABLE Users (
     id            INTEGER PRIMARY KEY,
     display_code  TEXT    NOT NULL,
     full_name     TEXT    NOT NULL,
-    email         TEXT    NOT NULL
+    email         TEXT    NOT NULL,
+    is_manager    INTEGER NOT NULL
 );
 
 CREATE TABLE AuthTokens (

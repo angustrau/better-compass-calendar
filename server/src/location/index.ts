@@ -26,3 +26,11 @@ export const cacheLocations = async (accessToken: AccessToken) => {
 
     cachedLocations = true;
 }
+
+export const getLocation = async (id: number) => {
+    return await schema.location.getLocation(id);
+}
+
+export const getAlllocations = async () => {
+    return await schema.location.getAllLocations();
+}

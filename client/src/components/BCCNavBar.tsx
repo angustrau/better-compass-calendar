@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
 import {
+    Link,
+    RouteComponentProps,
+    withRouter
+} from 'react-router-dom';
+import {
+    Button,
     Collapse,
     DropdownItem,
     DropdownMenu,
     DropdownToggle,
+    InputGroup,
+    InputGroupAddon,
     Nav,
     Navbar,
     NavbarBrand,
@@ -13,6 +20,7 @@ import {
 } from 'reactstrap';
 import * as auth from './../auth';
 import * as user from './../user';
+import BCCFilterBox from './BCCFilterBox';
 import './BCCNavBar.css';
 
 import Logo from './../resources/Logo';
@@ -41,10 +49,23 @@ class BCCNavbar extends React.Component<IProps, IState> {
     public render() {
         return (
             <Navbar expand='md' color='light' light={true} className='BCCNavBar'>
-                <NavbarBrand href='/'><Logo /></NavbarBrand>
+                <NavbarBrand
+                    tag={ Link }
+                    to='/'
+                >
+                    <Logo />
+                </NavbarBrand>
                 <NavbarToggler onClick={ this.toggle } />
                 <Collapse isOpen={ this.state.isOpen } navbar={true}>
-                    <Nav navbar={true} className='ml-auto'>
+                    <Nav navbar={true} className='BCCNavBar-Items'>
+                        <div className='BCCNavBar-Search'>
+                            <InputGroup>
+                                <BCCFilterBox filter='' onChange={() => {return}} search={true} />
+                                <InputGroupAddon addonType='append'>
+                                    <Button>Search</Button>
+                                </InputGroupAddon>
+                            </InputGroup>
+                        </div>
                         <UncontrolledDropdown nav={true} inNavbar={true}>
                             <DropdownToggle nav={true} caret={true}>
                                 { this.state.userFullName }

@@ -6,6 +6,7 @@ export interface IUserDetails {
     displayCode: string;
     fullName: string;
     email: string;
+    isManager: boolean;
 }
 
 export const getUserDetails = async (token: IAccessToken) => {
@@ -15,4 +16,9 @@ export const getUserDetails = async (token: IAccessToken) => {
 
 export const deleteUser = async (token: IAccessToken) => {
     await apiRequest('DELETE', '/user', null, token);
+}
+
+export const getManagers = async (token: IAccessToken) => {
+    const response = await apiRequest('GET', '/user/managers', null, token);
+    return response.managers as IUserDetails[]; 
 }

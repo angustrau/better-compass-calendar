@@ -19,13 +19,14 @@ export const registerUser = async (id: number, token: AccessToken): Promise<User
         user = await schema.user.getUser(id);
     } catch (error) {
         if (error === schema.errors.USER_NOT_FOUND) {
-            const { userDisplayCode, userFullName, userEmail } = await compass.user.getDetails(id, token.compassToken);
+            const { userDisplayCode, userFullName, userEmail, userRole } = await compass.user.getDetails(id, token.compassToken);
 
             user = {
                 id: id,
                 displayCode: userDisplayCode || '',
                 fullName: userFullName || '',
-                email: userEmail || ''
+                email: userEmail || '',
+                isManager: userRole !== 1
             }
             await schema.user.saveUser(user);
 
@@ -61,4 +62,8 @@ export const getDetails = async (id: number): Promise<User> => {
  */
 export const deleteUser = async (id: number) => {
     await schema.user.deleteUser(id);
+}
+
+export const getManagers = async () => {
+    return await schema.user.getManagers();
 }

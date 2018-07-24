@@ -12,7 +12,7 @@
     "moment": "^2.22.2",
     "react": "^16.4.1",
     "react-big-calendar": "^0.19.2",
-    "react-contenteditable": "^2.1.0",
+    "react-calendar": "^2.16.1",
     "react-dom": "^16.4.1",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "2.16.0",

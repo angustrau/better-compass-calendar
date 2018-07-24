@@ -13,14 +13,15 @@ export const errors = {
 
 const hashEvent = (event: EventDetails): string => {
     return objectHash([
-        event.guid, 
+        event.instanceId, 
         event.longTitle,
         event.description,
         event.start.getTime(), 
         event.finish.getTime(),
         event.backgroundColor,
         event.managerId,
-        event.runningStatus
+        event.runningStatus,
+        event.allDay
     ]);
 }
 
@@ -32,7 +33,7 @@ const saveEvent = async (event: EventDetails) => {
     }
 
     const _event: Event = {
-        id: event.guid,
+        id: event.instanceId,
         title: event.title,
         description: event.description,
         activityId: event.activityId,

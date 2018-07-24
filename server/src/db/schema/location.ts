@@ -7,6 +7,14 @@ export interface Location {
     shortName: string;
 }
 
+const dataToLocation = (data): Location => {
+    return {
+        id: data.id,
+        fullName: data.full_name,
+        shortName: data.short_name
+    }
+}
+
 /**
  * Gets location data from the DB
  * @async
@@ -25,11 +33,7 @@ export const getLocation = async (x: number | string): Promise<Location> => {
         throw errors.LOCATION_NOT_FOUND;
     }
 
-    return {
-        id: data.id,
-        fullName: data.full_name,
-        shortName: data.short_name
-    }
+    return dataToLocation(data);
 }
 
 /**
@@ -44,4 +48,9 @@ export const saveLocation = async (location: Location) => {
         location.fullName,
         location.shortName
     );
+}
+
+export const getAllLocations = async () => {
+    const data = await db.all('SELECT id, full_name, short_name FROM Locations');
+    return data.map(location => dataToLocation(location));
 }
