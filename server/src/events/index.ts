@@ -58,7 +58,21 @@ export const query = async (query: Query, accessToken: AccessToken) => {
 }
 
 const cacheEvents = async (accessToken: AccessToken, start: Date, end: Date) => {
-    let events = await compass.event.getEventsByUser(accessToken.userId, start, end, accessToken.compassToken);
+    let data = await compass.event.getEventsByUser(accessToken.userId, start, end, accessToken.compassToken);
+    let events = await Promise.all(data.map(async (eventData) => {
+        if (eventData.backgroundColor === '#f4dcdc') {
+            // Event has been modified
+            const extendedDetails = await compass.event.getExtendedEventDetails(eventData, accessToken.compassToken);
+            if (extendedDetails.CoveringUid !== 0) {
+                return {
+                    ...eventData,
+                    managerId: extendedDetails.CoveringUid
+                }
+            }
+        }
+
+        return eventData;
+    }));
 
     let activityIds: number[] = [];
     let managerIds: number[] = [];

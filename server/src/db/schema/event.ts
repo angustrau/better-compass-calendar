@@ -17,7 +17,7 @@ export interface Event {
 }
 
 export interface Query {
-    keywords?: string;
+    keywords?: string[];
     title?: string;
     location?: string;
     locationId?: number;
@@ -92,7 +92,7 @@ const escape = (text: any) => {
 
 export const queryEvents = async (query: Query): Promise<Event[]> => {
     let filters: string[] = [];
-    if (query.keywords)   filters.push(`${escape(query.keywords)}`);
+    if (query.keywords && query.keywords.length > 0) filters.push(`${escape(query.keywords.join(' '))}`);
     if (query.title)      filters.push(`(title : ${escape(query.title)})`);
     if (query.location)   filters.push(`({ location_short location_full } : ${escape(query.location)})`);
     if (query.locationId) filters.push(`(location_id : ${escape(query.locationId)})`);

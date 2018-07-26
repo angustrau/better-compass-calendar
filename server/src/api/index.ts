@@ -16,6 +16,9 @@ router.use('/events', events);
 import location = require('./location');
 router.use('/location', location);
 
+import subscriptions = require('./subscriptions');
+router.use('/subscriptions', subscriptions);
+
 router.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json({ error: err });

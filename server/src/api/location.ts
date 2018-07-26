@@ -1,7 +1,7 @@
 import express = require('express');
 const router = express.Router();
-import auth = require('./../../auth');
-import location = require('./../../location');
+import auth = require('./../auth');
+import location = require('./../location');
 
 router.post('/details', auth.authenticate, async (req, res, next) => {
     try {

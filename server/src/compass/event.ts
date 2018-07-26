@@ -75,3 +75,112 @@ export const getEventsByUser = async (id: number, startDate: Date, endDate: Date
         throw errors.INVALID_TOKEN;
     }
 }
+
+export interface EventLocationDetails {
+    "__type": string;
+    "archived": boolean;
+    "availableForBooking": boolean;
+    "building": string | null;
+    "computerNumber": number;
+    "hasCooling": boolean;
+    "hasDvd": boolean;
+    "hasGas": boolean;
+    "hasHeating": boolean;
+    "hasProjector": boolean;
+    "hasSmartboard": boolean;
+    "hasSpeakers": boolean;
+    "hasTv": boolean;
+    "hasWater": boolean;
+    "hasWhiteboard": boolean;
+    "hash": string | null;
+    "id": number;
+    "longName": string;
+    "seatNumber": number;
+    "shortName": string;
+}
+
+export interface ExtendedEventDetails {
+    "__type": string;
+    "ActivityDisplayName": string;
+    "ActivityId": string;
+    "ActivityManagerId": number;
+    "ActivitySingular": string;
+    "AttendanceMode": number;
+    "AttendeeCount": number;
+    "AttendeeLimit": number | null;
+    "AttendeeUserIdList": number[];
+    "CampusId": number;
+    "CoveringIid": string;
+    "CoveringPhotoPath": string;
+    "CoveringUid": number;
+    "CurrentInstance": boolean;
+    "FutureInstance": boolean;
+    "InstancePlural": string;
+    "InstanceSingular": string;
+    "IsBusRoute": boolean;
+    "IsExam": boolean;
+    "IsMeeting": boolean;
+    "IsSchoolApproval": boolean;
+    "IsYardDuty": boolean;
+    "LocationDetails": EventLocationDetails;
+    "LocationId": number;
+    "ManagerPhotoPath": string;
+    "ManagerTextReadable": string;
+    "PastInstance": boolean;
+    "ReadableAttendeeCount": string;
+    "RunningStatus": boolean;
+    "SubjectId": string;
+    "SubjectName": string;
+    "SubjectShortname": string;
+    "UpcomingInstance": boolean;
+    "UserCanCancelOrDelete": boolean;
+    "UserCanEdit": boolean;
+    "bs": any[];
+    "dt": string;
+    "fn": string;
+    "id": string;
+    "irm": boolean;
+    "l": string;
+    "locations": EventLocationDetails[];
+    "lp": {
+        "__type": string,
+        "fileAssetId": null,
+        "mp": null,
+        "name": null,
+        "sp": null,
+        "wnid": null
+    };
+    "m": string;
+    "managers": [
+        {
+            "__type": string,
+            "CoveringImportIdentifier": string,
+            "CoveringName": string,
+            "CoveringPhotoPath": string,
+            "CoveringUserId": number,
+            "ManagerImportIdentifier": string,
+            "ManagerName": string,
+            "ManagerPhotoPath": string,
+            "ManagerUserId": number
+        }
+    ];
+    "mi": number;
+    "st": string;
+    "wsv": string;
+}
+
+export const getExtendedEventDetails = async (event: EventDetails, authToken: AuthToken) => {
+    let response = await request('/Services/Activity.svc/GetLessonsByInstanceIdQuick?sessionstate=readonly', {
+        method: 'POST',
+        jar: authToken.jar,
+        json: {
+            instanceId: event.instanceId
+        }
+    });
+
+    if (response.statusCode === 200) {
+        return response.body.d as ExtendedEventDetails;
+    } else {
+        throw errors.INVALID_TOKEN;
+    }
+}

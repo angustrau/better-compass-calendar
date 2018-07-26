@@ -1,7 +1,7 @@
 import express = require('express');
 const router = express.Router();
-import auth = require('./../../auth');
-import user = require('./../../user');
+import auth = require('./../auth');
+import user = require('./../user');
 
 router.get('/details', auth.authenticate, async (req, res, next) => {
     try {

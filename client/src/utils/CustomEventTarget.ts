@@ -26,15 +26,14 @@ export default class CustomEventTarget {
 		}
 	}
 
-	public dispatchEvent(event: Event) {
+	public async dispatchEvent(event: Event) {
 		if (!(event.type in this.listeners)) {
 			return true;
 		}
 		const stack = this.listeners[event.type].slice();
 	
-		for (let i = 0, l = stack.length; i < l; i++) {
-			stack[i].call(this, event);
-		}
+		await Promise.all(stack.map(handler => handler.call(this, event)));
+
 		return !event.defaultPrevented;
 	};
 	

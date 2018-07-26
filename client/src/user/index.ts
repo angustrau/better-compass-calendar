@@ -20,22 +20,37 @@ const updateUserDetails = async () => {
     }
 }
 
-let managers: api.IUserDetails[] = [];
+const managers: { [id: number]: api.IUserDetails } = {};
 const updateManagers = async () => {
     if (auth.isAuthenticated()) {
-        managers = await api.getManagers(auth.getToken()!);
+        const m = await api.getManagers(auth.getToken()!);
+        m.forEach((manager) => {
+            managers[manager.id] = manager;
+        });
     }
 }
 
 export const init = async () => {
-    auth.events.addEventListener('login', () => {
-        updateUserDetails();
-        updateManagers();
+    auth.events.addEventListener('post-login', () => {
+        return Promise.all([
+            updateUserDetails(),
+            updateManagers()
+        ]);
     });
     updateUserDetails();
     updateManagers();
 }
 
 export const getUser = () => user;
-export const getAllManagers = () => managers;
+export const getAllManagers = () => Object.keys(managers).map(k => managers[k]);
+
+export const getManager = (id: number) => {
+    return managers[id] || {
+        id: 0,
+        displayCode: '',
+        fullName: '',
+        email: '',
+        isManager: true
+    };
+}
 

@@ -26,3 +26,7 @@ export const registerActivity = async (id: number, token: AccessToken): Promise<
 
     return activity;
 }
+
+export const getActivity = async (id: number) => {
+    return await schema.activity.getActivity(id);
+}

@@ -1,7 +1,7 @@
 import apiRequest from './apiRequest';
 import { IAccessToken } from './auth';
 
-export interface IEvent {
+export interface IEventDetails {
     id: string;
     title: string;
     description: string;
@@ -16,7 +16,7 @@ export interface IEvent {
 }
 
 export interface IQuery {
-    keywords?: string;
+    keywords?: string[];
     title?: string;
     location?: string;
     locationId?: number;
@@ -24,13 +24,14 @@ export interface IQuery {
     managerId?: number;
     after?: Date;
     before?: Date;
-    orderBy?: 'newest' | 'oldest' | 'relevance';    subscribedUserId?: number;
+    orderBy?: 'newest' | 'oldest' | 'relevance';
+    subscribedUserId?: number;
 
 }
 
 export const queryEvents = async (query: IQuery, token: IAccessToken) => {
     const response: { events: any[] } = await apiRequest('POST', '/events/query', query, token);
-    return response.events.map((event): IEvent => {
+    return response.events.map((event): IEventDetails => {
         return {
             ...event,
             endTime: new Date(event.endTime),

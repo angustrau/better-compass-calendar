@@ -5,7 +5,6 @@ import {
 import * as location from './../location';
 import * as user from './../user';
 import AutocompletePopover from './AutocompletePopover';
-import './BCCFilterBox.css';
 
 let idCount = 0;
 

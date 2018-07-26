@@ -9,6 +9,8 @@
   "proxy": "http://localhost:3001",
   "dependencies": {
     "bootstrap": "^4.1.2",
+    "date-arithmetic": "^3.1.0",
+    "material-icons": "^0.2.3",
     "moment": "^2.22.2",
     "react": "^16.4.1",
     "react-big-calendar": "^0.19.2",

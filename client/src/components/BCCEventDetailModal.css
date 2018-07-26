@@ -1,0 +1,25 @@
+.BCCEventDetailModal-Header > .modal-title {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.BCCEventDetailModal-Header > .modal-title > * {
+    margin-bottom: 0;
+}
+
+.BCCEventDetailModal-Subscribed {
+    margin-left: auto;
+}
+
+.BCCEventDetailModal-Body .row {
+    margin-bottom: 8px;
+}
+
+.BCCEventDetailModal-InfoIcon {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

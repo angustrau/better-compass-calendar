@@ -23,8 +23,9 @@ if (savedToken && savedExpires && parseInt(savedExpires, 10) > Date.now()) {
 export const init = async () => {
     savedUsername = localStorage.getItem(STORAGE_USERNAME_KEY);
     savedPassword = localStorage.getItem(STORAGE_PASSWORD_KEY);
+
     if (!token && savedUsername && savedPassword) {
-        login(savedUsername, savedPassword, true);
+        await login(savedUsername, savedPassword, true);
     }
 }
 
@@ -55,6 +56,7 @@ export const login = async (username: string, password: string, rememberMe: bool
     localStorage.setItem(STORAGE_EXPIRES_KEY, token.expires.getTime().toString());
 
     loggingIn = false;
+    await events.dispatchEvent(new Event('post-login'));
     events.dispatchEvent(new Event('login'));
 }
 

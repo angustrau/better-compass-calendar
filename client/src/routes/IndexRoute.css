@@ -6,18 +6,40 @@
 
 .IndexRoute-Body {
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .IndexRoute-Controls {
-    display: inline-block;
+    display: inline-flex;
     width: 100%;
     padding: 8px;
 }
 
 .IndexRoute-ControlsLeft {
     display: inline-flex;
+    align-items: center;
 }
 
 .IndexRoute-ControlsLeft > * {
     padding-right: 8px;
+}
+
+.IndexRoute-ControlsRight {
+    display: inline-flex;
+    margin-left: auto;
+    align-items: center;
+}
+
+.IndexRoute-ControlsRight > * {
+    padding-left: 8px;
+}
+
+.IndexRoute-ControlsRight > h4 {
+    margin: 0;
+}
+
+.IndexRoute-Calendar {
+    flex: 1;
+    padding: 0 8px 8px 8px;
 }
