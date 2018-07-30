@@ -1,0 +1,13 @@
+.BCCPushNotifToggle-Root {
+    padding: 0.25rem 1.5rem 0.25rem 2.75rem;
+    user-select: none;
+}
+
+.BCCPushNotifToggle-Root > input {
+    margin-top: 1rem;
+}
+
+.BCCPushNotifToggle-Root > label {
+    padding-left: 0.25rem;
+    margin: 0;
+}

@@ -7,6 +7,7 @@ export interface IUserDetails {
     fullName: string;
     email: string;
     isManager: boolean;
+    isAdmin: boolean;
 }
 
 export const getUserDetails = async (token: IAccessToken) => {

@@ -13,6 +13,7 @@ export interface Event {
     cancelled: boolean;
     startTime: Date;
     endTime: Date;
+    hasChanged: boolean;
     hash: string;
 }
 
@@ -29,7 +30,7 @@ export interface Query {
     subscribedUserId?: number;
 }
 
-const columns = 'id, title, description, activity_id, location_id, manager_id, all_day, cancelled, start_time, end_time, hash';
+const columns = 'id, title, description, activity_id, location_id, manager_id, all_day, cancelled, start_time, end_time, has_changed, hash';
 
 const formatData = (data: any): Event => {
     return {
@@ -43,6 +44,7 @@ const formatData = (data: any): Event => {
         cancelled: data.cancelled === 1,
         startTime: new Date(data.start_time),
         endTime: new Date(data.end_time),
+        hasChanged: data.has_changed === 1,
         hash: data.hash
     }
 }
@@ -69,7 +71,7 @@ export const getEvent = async (id: string): Promise<Event> => {
  */
 export const saveEvent = async (event: Event) => {
     await db.run(
-        `REPLACE INTO Events (${columns}) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
+        `REPLACE INTO Events (${columns}) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)`,
         event.id,
         event.title,
         event.description,
@@ -80,6 +82,7 @@ export const saveEvent = async (event: Event) => {
         event.cancelled ? 1 : 0,
         event.startTime.getTime(),
         event.endTime.getTime(),
+        event.hasChanged ? 1 : 0,
         event.hash
     );
 }

@@ -1,7 +1,7 @@
-import * as api from './../api';
-import * as auth from './../auth';
+import * as api from './api';
+import * as auth from './auth';
 
-import CustomEventTarget from './../utils/CustomEventTarget';
+import CustomEventTarget from './utils/CustomEventTarget';
 
 export const events = new CustomEventTarget();
 
@@ -10,7 +10,8 @@ let user: api.IUserDetails = {
     displayCode: '',
     fullName: '',
     email: '',
-    isManager: false
+    isManager: false,
+    isAdmin: false
 };
 
 const updateUserDetails = async () => {
@@ -37,8 +38,8 @@ export const init = async () => {
             updateManagers()
         ]);
     });
-    updateUserDetails();
-    updateManagers();
+    // updateUserDetails();
+    // updateManagers();
 }
 
 export const getUser = () => user;
@@ -50,7 +51,8 @@ export const getManager = (id: number) => {
         displayCode: '',
         fullName: '',
         email: '',
-        isManager: true
+        isManager: true,
+        isAdmin: false
     };
 }
 

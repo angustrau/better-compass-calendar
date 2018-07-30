@@ -8,6 +8,7 @@ import {
 import './App.css';
 import * as auth from './auth';
 import * as routes from './routes';
+import * as user from './user';
 
 interface IState {
 	authenticated: boolean;
@@ -54,7 +55,10 @@ class App extends React.Component<object, IState> {
 		return (
 			<Switch>
 				<Route exact={true} path='/' component={ routes.IndexRoute } />
-				<Route path='/f/:filter?' component={routes.IndexRoute} />
+				<Route path='/f/:filter?' component={ routes.IndexRoute } />
+				<Route path='/e/:eventid' component={ routes.IndexRoute } />
+				<Route path='/account' component={ routes.AccountSettignsRoute} />
+				<Route path='/admin/:tab?' component={ routes.AdminRoute } />
 			</Switch>
 		);
 	}

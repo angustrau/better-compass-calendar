@@ -1,5 +1,5 @@
-import * as api from './../api';
-import * as auth from './../auth';
+import * as api from './api';
+import * as auth from './auth';
 
 const locations: { [id: number]: api.ILocationDetails } = {};
 const updateLocations = async () => {
@@ -13,7 +13,7 @@ const updateLocations = async () => {
 
 export const init = () => {
     auth.events.addEventListener('post-login', updateLocations);
-    updateLocations();
+    // updateLocations();
 }
 
 export const getAllLocations = () => Object.keys(locations).map(k => locations[k]);

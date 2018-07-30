@@ -10,13 +10,16 @@ import {
     InputGroup,
     InputGroupAddon
 } from 'reactstrap';
-import BCCBigCalendar, { View } from './../components/BCCBigCalendar';
-import BCCFilterBox from './../components/BCCFilterBox';
-import BCCNavBar from './../components/BCCNavBar';
+import { IEventDetails } from '../api';
+import BCCBigCalendar, { View } from '../components/BCCBigCalendar';
+import BCCFilterBox from '../components/BCCFilterBox';
+import BCCNavBar from '../components/BCCNavBar';
+import BCCEventDetailModal from './../components/BCCEventDetailModal';
 import './IndexRoute.css';
 
 interface IRouterProps {
     filter?: string;
+    eventid?: string;
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
@@ -26,6 +29,7 @@ interface IState {
     appliedFilter: string;
     view: View;
     date: Date;
+    showingEventId: string | null;
 }
 
 class IndexRoute extends React.Component<IProps, IState> {
@@ -37,7 +41,8 @@ class IndexRoute extends React.Component<IProps, IState> {
             filter: initialFilter,
             appliedFilter: initialFilter,
             view: 'day',
-            date: new Date()
+            date: new Date(),
+            showingEventId: this.props.match.params.eventid || null
         }
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -50,10 +55,12 @@ class IndexRoute extends React.Component<IProps, IState> {
         this.handleNextClick = this.handleNextClick.bind(this);
         this.handleViewChange = this.handleViewChange.bind(this);
         this.handleDateChange = this.handleDateChange.bind(this);
+        this.handleEventClick = this.handleEventClick.bind(this);
+        this.handleCloseEventModal = this.handleCloseEventModal.bind(this);
     }
 
     public render() {
-        const { filter, appliedFilter, view, date } = this.state;
+        const { filter, appliedFilter, view, date, showingEventId } = this.state;
 
         return (
             <div className='IndexRoute-Root'>
@@ -95,9 +102,15 @@ class IndexRoute extends React.Component<IProps, IState> {
                             date={ date }
                             onViewChange={ this.handleViewChange }
                             onDateChange={ this.handleDateChange }
+                            onEventClick={ this.handleEventClick }
                         />
                     </div>
                 </div>
+                <BCCEventDetailModal
+                    isOpen={ showingEventId !== null }
+                    eventId={ showingEventId }
+                    onClose={ this.handleCloseEventModal }
+                />
             </div>
         );
     }
@@ -170,6 +183,16 @@ class IndexRoute extends React.Component<IProps, IState> {
 
     private handleDateChange(date: Date) {
         this.setState({ date });
+    }
+
+    private handleEventClick(event: IEventDetails) {
+        this.props.history.replace('/e/' + event.id);
+        this.setState({ showingEventId: event.id });
+    }
+
+    private handleCloseEventModal() {
+        this.props.history.replace('/');
+        this.setState({ showingEventId: null });
     }
 }
 

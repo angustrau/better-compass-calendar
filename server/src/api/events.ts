@@ -20,4 +20,12 @@ router.post('/query', auth.authenticate, async (req, res, next) => {
     }
 });
 
+router.post('/details', auth.authenticate, async (req, res, next) => {
+    try {
+        res.json(await events.getEvent(req.body.id));
+    } catch (error) {
+        next(error);
+    }
+});
+
 export = router;

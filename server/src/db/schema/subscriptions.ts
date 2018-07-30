@@ -1,5 +1,5 @@
 import db = require('./../../db');
-import { User } from './user';
+import { User, getUser } from './user';
 import { Activity } from './activity';
 
 export const subscribe = async (user: User, activity: Activity) => {
@@ -25,5 +25,5 @@ export const getSubscriptions = async (user: User) => {
 
 export const getSubscribedUsers = async (activity: Activity) => {
     const results = await db.all('SELECT user_id, activity_id FROM Subscriptions WHERE activity_id = $1', activity.id);
-    return results.map(x => x.user_id);
+    return Promise.all(results.map(x => getUser(x.user_id)));
 }

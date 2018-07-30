@@ -22,6 +22,7 @@ import * as auth from './../auth';
 import * as user from './../user';
 import BCCFilterBox from './BCCFilterBox';
 import './BCCNavBar.css';
+import BCCPushNotifToggle from './BCCPushNotifToggle';
 
 import Logo from './../resources/Logo';
 
@@ -30,6 +31,7 @@ interface IProps extends RouteComponentProps<any,any> {}
 interface IState {
     isOpen: boolean;
     userFullName: string;
+    userIsAdmin: boolean;
 }
 
 class BCCNavbar extends React.Component<IProps, IState> {
@@ -38,7 +40,8 @@ class BCCNavbar extends React.Component<IProps, IState> {
 
         this.state = {
             isOpen: false,
-            userFullName: user.getUser().fullName
+            userFullName: user.getUser().fullName,
+            userIsAdmin: user.getUser().isAdmin
         }
 
         this.toggle = this.toggle.bind(this);
@@ -71,9 +74,18 @@ class BCCNavbar extends React.Component<IProps, IState> {
                                 { this.state.userFullName }
                             </DropdownToggle>
                             <DropdownMenu right={true}>
-                                <DropdownItem>
+                                <BCCPushNotifToggle />
+                                <DropdownItem divider={true} />
+                                <DropdownItem tag={ Link } to='/account'>
                                     Account settings
                                 </DropdownItem>
+                                {
+                                    this.state.userIsAdmin ? (
+                                        <DropdownItem tag={ Link } to='/admin'>
+                                            Admin settings
+                                        </DropdownItem>
+                                    ) : undefined
+                                }
                                 <DropdownItem divider={true} />
                                 <DropdownItem onClick={ this.logout }>
                                     Log out
@@ -103,7 +115,10 @@ class BCCNavbar extends React.Component<IProps, IState> {
     }
 
     private userEventListener() {
-        this.setState({ userFullName: user.getUser().fullName });
+        this.setState({ 
+            userFullName: user.getUser().fullName,
+            userIsAdmin: user.getUser().isAdmin
+        });
     }
 }
 

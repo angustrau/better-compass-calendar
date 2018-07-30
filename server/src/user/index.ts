@@ -26,7 +26,8 @@ export const registerUser = async (id: number, token: AccessToken): Promise<User
                 displayCode: userDisplayCode || '',
                 fullName: userFullName || '',
                 email: userEmail || '',
-                isManager: userRole !== 1
+                isManager: userRole !== 1,
+                isAdmin: false
             }
             await schema.user.saveUser(user);
 

@@ -3,6 +3,8 @@ const app = express();
 import path = require('path');
 import db = require('./db');
 import config = require('./../config');
+import dotenv = require('dotenv');
+dotenv.config();
 
 import api = require('./api');
 app.use('/api', api);

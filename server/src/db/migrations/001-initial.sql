@@ -7,7 +7,8 @@ CREATE TABLE Users (
     display_code  TEXT    NOT NULL,
     full_name     TEXT    NOT NULL,
     email         TEXT    NOT NULL,
-    is_manager    INTEGER NOT NULL
+    is_manager    INTEGER NOT NULL,
+    is_admin      INTEGER NOT NULL
 );
 
 CREATE TABLE AuthTokens (
@@ -38,6 +39,7 @@ CREATE TABLE Events (
     cancelled   INTEGER NOT NULL,
     start_time  INTEGER NOT NULL,
     end_time    INTEGER NOT NULL,
+    has_changed INTEGER NOT NULL,
     hash        TEXT    NOT NULL
 );
 
@@ -98,6 +100,14 @@ CREATE TABLE Subscriptions (
     PRIMARY KEY(user_id, activity_id)
 );
 
+CREATE TABLE PushSubscriptions (
+    user_id     INTEGER NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
+    device_name TEXT NOT NULL,
+    endpoint    TEXT PRIMARY KEY,
+    key_p256dh  TEXT NOT NULL,
+    key_auth    TEXT NOT NULL
+);
+
 CREATE TABLE RequestLog (
     log_time INTEGER NOT NULL,
     method TEXT NOT NULL,
@@ -116,4 +126,5 @@ DROP TABLE Locations;
 DROP TABLE Events;
 DROP TABLE EventsIndex;
 DROP TABLE Subscriptions;
+DROP TABLE PushSubscriptions;
 DROP TABLE RequestLog;

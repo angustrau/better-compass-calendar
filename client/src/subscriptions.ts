@@ -1,7 +1,7 @@
-import * as api from './../api';
-import * as auth from './../auth';
+import * as api from './api';
+import * as auth from './auth';
 
-import CustomEventTarget from './../utils/CustomEventTarget';
+import CustomEventTarget from './utils/CustomEventTarget';
 
 export const events = new CustomEventTarget();
 
@@ -14,7 +14,7 @@ const updateSubscriptions = async () => {
 
 export const init = () => {
     auth.events.addEventListener('post-login', updateSubscriptions);
-    updateSubscriptions();
+    // updateSubscriptions();
 }
 
 export const subscribe = async (activity: number) => {

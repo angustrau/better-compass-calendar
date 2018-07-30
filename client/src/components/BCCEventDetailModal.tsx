@@ -10,9 +10,11 @@ import {
     Row
 } from 'reactstrap';
 import { IEventDetails } from '../api';
-import * as location from './../location';
-import * as subscriptions from './../subscriptions';
-import * as user from './../user';
+import { getToken, isAuthenticated } from '../auth';
+import * as location from '../location';
+import * as subscriptions from '../subscriptions';
+import * as user from '../user';
+import * as api from './../api';
 import './BCCEventDetailModal.css';
 
 const DataDisplay = (props: { icon: string, children?: React.ReactNode }) => {
@@ -31,13 +33,14 @@ const DataDisplay = (props: { icon: string, children?: React.ReactNode }) => {
 }
 
 interface IProps {
-    event: IEventDetails | null;
+    eventId: string | null;
     isOpen: boolean;
     onClose: () => void;
 }
 
 interface IState {
     subscribed: boolean;
+    event: IEventDetails | null;
 }
 
 class BCCEventDetailModal extends React.Component<IProps, IState> {
@@ -45,15 +48,23 @@ class BCCEventDetailModal extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            subscribed: this.props.event ? subscriptions.isSubscribed(this.props.event.activityId) : false
+            subscribed: false,
+            event: null
+        }
+
+        if (this.props.eventId) {
+            api.getEventDetails(this.props.eventId, getToken()!)
+            .then((event) => {
+                this.setState({ subscribed: subscriptions.isSubscribed(event.activityId), event });
+            });
         }
 
         this.toggleSubscription = this.toggleSubscription.bind(this);
     }
 
     public render() {
-        const { event, isOpen, onClose } = this.props;
-        const { subscribed } = this.state;
+        const { isOpen, onClose } = this.props;
+        const { subscribed, event } = this.state;
 
         if (!event) {
             return <div />
@@ -99,14 +110,15 @@ class BCCEventDetailModal extends React.Component<IProps, IState> {
         );
     }
 
-    public componentDidUpdate(prevProps: IProps) {
-        if (this.props.event !== prevProps.event && this.props.event) {
-            this.setState({ subscribed: subscriptions.isSubscribed(this.props.event.activityId) });
+    public async componentDidUpdate(prevProps: IProps) {
+        if (this.props.eventId !== prevProps.eventId && this.props.eventId && isAuthenticated()) {
+            const event = await api.getEventDetails(this.props.eventId, getToken()!);
+            this.setState({ subscribed: subscriptions.isSubscribed(event.activityId), event });
         }
     }
 
     private toggleSubscription() {
-        const activity = this.props.event!.activityId;
+        const activity = this.state.event!.activityId;
         if (subscriptions.isSubscribed(activity)) {
             subscriptions.unsubscribe(activity);
         } else {

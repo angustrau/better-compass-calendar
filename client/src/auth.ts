@@ -1,5 +1,5 @@
-import * as api from "../api";
-import CustomEventTarget from '../utils/CustomEventTarget';
+import * as api from "./api";
+import CustomEventTarget from './utils/CustomEventTarget';
 
 const STORAGE_TOKEN_KEY = 'bcc-auth-token';
 const STORAGE_EXPIRES_KEY = 'bcc-auth-expires';
@@ -23,6 +23,11 @@ if (savedToken && savedExpires && parseInt(savedExpires, 10) > Date.now()) {
 export const init = async () => {
     savedUsername = localStorage.getItem(STORAGE_USERNAME_KEY);
     savedPassword = localStorage.getItem(STORAGE_PASSWORD_KEY);
+
+    if (token) {
+        await events.dispatchEvent(new Event('post-login'));
+        await events.dispatchEvent(new Event('login'));
+    }
 
     if (!token && savedUsername && savedPassword) {
         await login(savedUsername, savedPassword, true);

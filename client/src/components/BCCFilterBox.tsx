@@ -2,8 +2,8 @@ import * as React from 'react';
 import {
     Input
 } from 'reactstrap';
-import * as location from './../location';
-import * as user from './../user';
+import * as location from '../location';
+import * as user from '../user';
 import AutocompletePopover from './AutocompletePopover';
 
 let idCount = 0;

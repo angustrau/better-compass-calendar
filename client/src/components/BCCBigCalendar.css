@@ -1,3 +1,8 @@
 .BCCBigCalendar-Root {
     height: 100%;
 }
+
+.BCCBigCalendar-Event {
+    width: 100% !important;
+    left: 0 !important;
+}

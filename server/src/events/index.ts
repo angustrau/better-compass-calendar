@@ -2,6 +2,7 @@ import schema = require('./../db/schema');
 import compass = require('./../compass');
 import user = require('./../user');
 import activities = require('./../activities');
+import notification = require('./../notification');
 import objectHash = require('object-hash');
 import { AccessToken } from '../db/schema/AccessToken';
 import { EventDetails } from '../compass/event';
@@ -9,6 +10,10 @@ import { Event, Query } from '../db/schema/event';
 
 export const errors = {
     INVALID_QUERY: 'Query is not valid'
+}
+
+export const getEvent = async (id: string) => {
+    return schema.event.getEvent(id);
 }
 
 const hashEvent = (event: EventDetails): string => {
@@ -43,6 +48,7 @@ const saveEvent = async (event: EventDetails) => {
         cancelled: event.runningStatus === 0,
         startTime: event.start,
         endTime: event.finish,
+        hasChanged: event.backgroundColor === '#f4dcdc',
         hash: hashEvent(event)
     }
     await schema.event.saveEvent(_event);
@@ -91,15 +97,16 @@ const cacheEvents = async (accessToken: AccessToken, start: Date, end: Date) => 
 
     await Promise.all(events.map(async (event) => {
         try {
-            const currentDetails = await schema.event.getEvent(event.guid);
+            const currentDetails = await schema.event.getEvent(event.instanceId);
             const newHash = hashEvent(event);
 
             if (currentDetails.hash !== newHash) {
-                saveEvent(event);
+                const _event = await saveEvent(event);
+                await notification.notifyEventUpdate(_event);
             }
         } catch (error) {
             if (error === schema.errors.EVENT_NOT_FOUND) {
-                saveEvent(event);
+                await saveEvent(event);
             } else {
                 throw error;
             }

@@ -4,5 +4,6 @@ export import location = require('./location');
 export import activity = require('./activity');
 export import event = require('./event');
 export import subscriptions = require('./subscriptions');
+export import push = require('./push');
 export import requestlog = require('./requestlog');
 export import errors = require('./errors');

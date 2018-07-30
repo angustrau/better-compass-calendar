@@ -44,7 +44,7 @@ const defaults = {
     headers: {
         'User-Agent': config.userAgent
     },
-    proxy: config.proxy ? config.proxy.address : undefined,
+    // proxy: config.proxy ? config.proxy.address : undefined,
     strictSSL: config.proxy ? config.proxy.strictSSL : undefined,
     tunnel: config.proxy ? true : undefined,
     maxAttempts: 5,

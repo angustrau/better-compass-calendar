@@ -1,5 +1,5 @@
-import { IQuery } from './../api';
-import * as user from './../user';
+import { IQuery } from '../api';
+import * as user from '../user';
 
 export interface IToken {
     type: string,

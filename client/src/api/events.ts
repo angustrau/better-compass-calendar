@@ -12,6 +12,7 @@ export interface IEventDetails {
     cancelled: boolean;
     startTime: Date;
     endTime: Date;
+    hasChanged: boolean;
     hash: string;
 }
 
@@ -38,4 +39,13 @@ export const queryEvents = async (query: IQuery, token: IAccessToken) => {
             startTime: new Date(event.startTime)
         }
     });
+}
+
+export const getEventDetails = async (id: string, token: IAccessToken) => {
+    const response = await apiRequest('POST', '/events/details', { id }, token);
+    return {
+        ...response,
+        endTime: new Date(response.endTime),
+        startTime: new Date(response.startTime)
+    } as IEventDetails
 }

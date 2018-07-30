@@ -10,7 +10,6 @@ import * as subscriptions from './../subscriptions';
 import * as user from './../user';
 import filterToQuery from './../utils/filterToQuery';
 import './BCCBigCalendar.css'
-import BCCEventDetailModal from './BCCEventDetailModal';
 
 BigCalendar.momentLocalizer(moment);
 
@@ -22,11 +21,11 @@ interface IProps {
     date: Date;
     onViewChange: (view: View) => void;
     onDateChange: (date: Date) => void;
+    onEventClick: (event: api.IEventDetails) => void;
 }
 
 interface IState {
     events: api.IEventDetails[];
-    showingEventDetails: api.IEventDetails | null;
 }
 
 class BCCBigCalendar extends React.Component<IProps, IState> {
@@ -34,18 +33,15 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
         super(props);
 
         this.state = {
-            events: [],
-            showingEventDetails: null
+            events: []
         }
 
         this.handleSubscriptionUpdate = this.handleSubscriptionUpdate.bind(this);
-        this.handleSelectEvent = this.handleSelectEvent.bind(this);
-        this.handleCloseEventModal = this.handleCloseEventModal.bind(this);
     }
 
     public render() {
-        const { view, date, onViewChange, onDateChange } = this.props;
-        const { events, showingEventDetails } = this.state;
+        const { view, date, onViewChange, onDateChange, onEventClick } = this.props;
+        const { events } = this.state;
 
         return (
             <div className='BCCBigCalendar-Root'>
@@ -63,15 +59,16 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
                     eventPropGetter={ (event: api.IEventDetails, start: Date, end: Date, isSelected: boolean) => {
                         return {
                             style: {
-                                backgroundColor: event.cancelled ? '#7BADD6' : undefined,
+                                backgroundColor: event.cancelled ? '#7BADD6' : event.hasChanged ? '#D0585D' : undefined,
                                 textDecoration: event.cancelled ? 'line-through' : undefined
-                            }
+                            },
+                            className: 'BCCBigCalendar-Event'
                         }
                     }}
                     startAccessor='startTime'
                     endAccessor='endTime'
                     allDayAccessor='allDay'
-                    onSelectEvent={ this.handleSelectEvent }
+                    onSelectEvent={ onEventClick }
 
                     date={ date }
                     view={ view }
@@ -80,7 +77,7 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
 
                     formats={{
                         dayFormat: 'ddd DD/MM',
-                        eventTimeRangeFormat: ((range: { start: Date, end: Date }) => range.start.toLocaleString('en-au', { hour12: false,hour:'2-digit',minute:'2-digit'})) as any
+                        eventTimeRangeFormat: ((range: { start: Date, end: Date }) => range.start.toLocaleString('en-au', { hour12: false, hour: '2-digit', minute: '2-digit'})) as any
                     }}
 
                     views={[ 'month', 'week', 'day' ]}
@@ -89,11 +86,6 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
                     max={ new Date(0, 0, 0, 16) }
                     toolbar={ false }
                     popup={ true }
-                />
-                <BCCEventDetailModal
-                    isOpen={ showingEventDetails !== null }
-                    event={ showingEventDetails! }
-                    onClose={ this.handleCloseEventModal }
                 />
             </div>
         );
@@ -134,14 +126,6 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
 
     private handleSubscriptionUpdate() {
         this.updateEvents();
-    }
-
-    private handleSelectEvent(event: api.IEventDetails, e: React.SyntheticEvent) {
-        this.setState({ showingEventDetails: event });
-    }
-
-    private handleCloseEventModal() {
-        this.setState({ showingEventDetails: null });
     }
 }
 

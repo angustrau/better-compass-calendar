@@ -6,17 +6,23 @@ import App from './App';
 import * as auth from './auth';
 import './index.css';
 import * as location from './location';
+import * as push from './push';
 import registerServiceWorker from './registerServiceWorker';
 import * as subscriptions from './subscriptions';
 import * as user from './user';
 
 auth.init();
-user.init()
+user.init();
 location.init();
 subscriptions.init();
+push.init();
 
-ReactDOM.render(
-	<App />,
-	document.getElementById('root') as HTMLElement
-);
+auth.init()
+.then(() => {
+	ReactDOM.render(
+		<App />,
+		document.getElementById('root') as HTMLElement
+	);
+});
+
 registerServiceWorker();
