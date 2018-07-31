@@ -32,6 +32,7 @@ interface IState {
     isOpen: boolean;
     userFullName: string;
     userIsAdmin: boolean;
+    search: string;
 }
 
 class BCCNavbar extends React.Component<IProps, IState> {
@@ -41,12 +42,15 @@ class BCCNavbar extends React.Component<IProps, IState> {
         this.state = {
             isOpen: false,
             userFullName: user.getUser().fullName,
-            userIsAdmin: user.getUser().isAdmin
+            userIsAdmin: user.getUser().isAdmin,
+            search: ''
         }
 
         this.toggle = this.toggle.bind(this);
         this.logout = this.logout.bind(this);
         this.userEventListener = this.userEventListener.bind(this);
+        this.handleSearchChange = this.handleSearchChange.bind(this);
+        this.handleSearchClick = this.handleSearchClick.bind(this);
     }
 
     public render() {
@@ -63,9 +67,9 @@ class BCCNavbar extends React.Component<IProps, IState> {
                     <Nav navbar={true} className='BCCNavBar-Items'>
                         <div className='BCCNavBar-Search'>
                             <InputGroup>
-                                <BCCFilterBox filter='' onChange={() => {return}} search={true} />
+                                <BCCFilterBox filter={ this.state.search } onChange={ this.handleSearchChange } search={true} />
                                 <InputGroupAddon addonType='append'>
-                                    <Button>Search</Button>
+                                    <Button onClick={ this.handleSearchClick }>Search</Button>
                                 </InputGroupAddon>
                             </InputGroup>
                         </div>
@@ -119,6 +123,14 @@ class BCCNavbar extends React.Component<IProps, IState> {
             userFullName: user.getUser().fullName,
             userIsAdmin: user.getUser().isAdmin
         });
+    }
+
+    private handleSearchChange(search: string) {
+        this.setState({ search });
+    }
+
+    private handleSearchClick() {
+        this.props.history.push('/s/' + encodeURIComponent(this.state.search));
     }
 }
 

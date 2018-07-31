@@ -1,0 +1,11 @@
+.AccountSettingsRoute-Body {
+    padding-top: 8px;
+}
+
+.AccountSettingsRoute-PushDelete {
+    display: flex;
+}
+
+.AccountSettingsRoute-PushDelete > button {
+    margin-left: auto;
+}

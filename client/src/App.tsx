@@ -57,6 +57,7 @@ class App extends React.Component<object, IState> {
 				<Route exact={true} path='/' component={ routes.IndexRoute } />
 				<Route path='/f/:filter?' component={ routes.IndexRoute } />
 				<Route path='/e/:eventid' component={ routes.IndexRoute } />
+				<Route path='/s/:search?' component={ routes.SearchRoute } />
 				<Route path='/account' component={ routes.AccountSettignsRoute} />
 				<Route path='/admin/:tab?' component={ routes.AdminRoute } />
 			</Switch>

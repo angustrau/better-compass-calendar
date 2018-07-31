@@ -36,6 +36,10 @@ export const init = async () => {
         return;
     }
 
+    auth.events.addEventListener('log out', async () => {
+        await unsubscribe();
+    });
+
     const registration = await navigator.serviceWorker.ready;
     subscribed = await registration.pushManager.getSubscription() !== null;
 }
@@ -102,3 +106,4 @@ export const unsubscribe = async () => {
 }
 
 export const isSubscribed = () => subscribed;
+export const getDeviceID = () => deviceID;
