@@ -25,7 +25,7 @@ export interface IQuery {
     managerId?: number;
     after?: Date;
     before?: Date;
-    orderBy?: 'newest' | 'oldest' | 'relevance';
+    orderBy?: 'latest' | 'oldest' | 'relevance';
     subscribedUserId?: number;
 
 }

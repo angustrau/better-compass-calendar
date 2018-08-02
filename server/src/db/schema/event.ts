@@ -26,7 +26,7 @@ export interface Query {
     managerId?: number;
     after?: Date;
     before?: Date;
-    orderBy?: 'newest' | 'oldest' | 'relevance';
+    orderBy?: 'latest' | 'oldest' | 'relevance';
     subscribedUserId?: number;
 }
 
@@ -107,7 +107,7 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
     sql += query.subscribedUserId ? ` AND activity_id IN (SELECT activity_id FROM Subscriptions WHERE user_id = $subscribedUserId)` : '';
     sql += query.after  ? ` AND (start_time >= $after)` : '';
     sql += query.before ? ` AND (end_time <= $before)` : '';
-    sql += query.orderBy === 'newest' ? ' ORDER BY start_time DESC' : query.orderBy === 'oldest' ? ' ORDER BY start_time ASC' : '';
+    sql += query.orderBy === 'latest' ? ' ORDER BY start_time DESC' : query.orderBy === 'oldest' ? ' ORDER BY start_time ASC' : '';
     
     const results = await db.all(
         sql, 

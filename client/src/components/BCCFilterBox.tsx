@@ -12,6 +12,7 @@ interface IProps {
     filter: string;
     onChange: (filter: string) => void;
     search?: boolean;
+    className?: string;
 }
 
 interface IState {
@@ -79,7 +80,7 @@ class BCCFilterBox extends React.Component<IProps, IState> {
         }
 
         return (
-            <div className='BCCFilterBox-Root'>
+            <div className={ 'BCCFilterBox-Root ' + this.props.className || '' }>
                 <Input 
                     value={this.props.filter} 
                     onChange={this.handleInputChange}

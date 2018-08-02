@@ -1,4 +1,8 @@
 import * as React from 'react';
+import { 
+    RouteComponentProps, 
+    withRouter 
+} from 'react-router-dom';
 import {
     Button,
     Col,
@@ -32,10 +36,11 @@ const DataDisplay = (props: { icon: string, children?: React.ReactNode }) => {
     )
 }
 
-interface IProps {
+interface IProps extends RouteComponentProps<{}> {
     eventId: string | null;
     isOpen: boolean;
     onClose: () => void;
+    permalink?: boolean;
 }
 
 interface IState {
@@ -60,10 +65,11 @@ class BCCEventDetailModal extends React.Component<IProps, IState> {
         }
 
         this.toggleSubscription = this.toggleSubscription.bind(this);
+        this.handlePermalinkClick = this.handlePermalinkClick.bind(this);
     }
 
     public render() {
-        const { isOpen, onClose } = this.props;
+        const { isOpen, onClose, permalink } = this.props;
         const { subscribed, event } = this.state;
 
         if (!event) {
@@ -104,6 +110,7 @@ class BCCEventDetailModal extends React.Component<IProps, IState> {
                     </Container>
                 </ModalBody>
                 <ModalFooter>
+                    { permalink ? <span className='btn material-icons' onClick={ this.handlePermalinkClick }>open_in_new</span> : undefined }
                     <Button color='secondary' onClick={ onClose }>Close</Button>
                 </ModalFooter>
             </Modal>
@@ -126,6 +133,11 @@ class BCCEventDetailModal extends React.Component<IProps, IState> {
         }
         this.setState({ subscribed: !this.state.subscribed });
     }
+
+    private handlePermalinkClick() {
+        const { eventId, history } = this.props;
+        history.push('/e/' + eventId);
+    }
 }
 
-export default BCCEventDetailModal;
+export default withRouter(BCCEventDetailModal);

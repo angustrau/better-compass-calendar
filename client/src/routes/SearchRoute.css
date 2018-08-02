@@ -1,0 +1,16 @@
+.SearchRoute-Body {
+    padding-top: 8px;
+}
+
+.SearchRoute-Input {
+    flex: 1;
+}
+
+.SearchRoute-result {
+    padding: 8px;
+}
+
+.SearchRoute-more {
+    width: 100%;
+    margin-bottom: 8px;
+}
