@@ -1,5 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const user_1 = require("../db/schema/user");
+let managers;
+user_1.getManagers().then(x => managers = x);
 const parseDate = (dateString) => {
     try {
         const [year, month, date] = dateString.split('-');
@@ -50,8 +53,8 @@ const filterToQuery = (filter, userId) => {
                 };
             case 'teacher':
                 return {
-                    type: 'manager',
-                    data: token[1]
+                    type: 'managerid',
+                    data: managers.find(x => x.displayCode === token[1]).id
                 };
             case 'room':
                 return {
@@ -68,7 +71,7 @@ const filterToQuery = (filter, userId) => {
     const keywords = [];
     let title;
     let location;
-    let manager;
+    let managerId;
     let after;
     let before;
     let subscribedUserId;
@@ -83,8 +86,8 @@ const filterToQuery = (filter, userId) => {
             case 'location':
                 location = token.data;
                 break;
-            case 'manager':
-                manager = token.data;
+            case 'managerid':
+                managerId = token.data;
                 break;
             case 'before':
                 if (!before || token.data < before) {
@@ -115,7 +118,7 @@ const filterToQuery = (filter, userId) => {
         keywords,
         title,
         location,
-        manager,
+        managerId,
         after,
         before,
         subscribedUserId

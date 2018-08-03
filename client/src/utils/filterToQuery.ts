@@ -59,8 +59,8 @@ const filterToQuery = (filter: string): IQuery => {
                 }
             case 'teacher':
                 return {
-                    type: 'manager',
-                    data: token[1]
+                    type: 'managerid',
+                    data: user.getAllManagers().find(x => x.displayCode === token[1])!.id
                 }
             case 'room':
                 return {
@@ -78,7 +78,7 @@ const filterToQuery = (filter: string): IQuery => {
     const keywords: string[] = [];
     let title: string | undefined;
     let location: string | undefined;
-    let manager: string | undefined;
+    let managerId: number | undefined;
     let after: Date | undefined;
     let before: Date | undefined;
     let subscribedUserId: number | undefined;
@@ -93,8 +93,8 @@ const filterToQuery = (filter: string): IQuery => {
             case 'location':
                 location = token.data;
                 break;
-            case 'manager':
-                manager = token.data;
+            case 'managerid':
+                managerId = token.data;
                 break;
             case 'before':
                 if (!before || token.data < before) {
@@ -126,7 +126,7 @@ const filterToQuery = (filter: string): IQuery => {
         keywords,
         title,
         location,
-        manager,
+        managerId,
         after,
         before,
         subscribedUserId

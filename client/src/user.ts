@@ -43,7 +43,7 @@ export const init = async () => {
 }
 
 export const getUser = () => user;
-export const getAllManagers = () => Object.keys(managers).map(k => managers[k]);
+export const getAllManagers = () => Object.keys(managers).map((k): api.IUserDetails => managers[k]);
 
 export const getManager = (id: number) => {
     return managers[id] || {

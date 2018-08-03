@@ -1,10 +1,13 @@
 import { Query } from '../db/schema/event';
-import { User } from '../db/schema/user';
+import { getManagers, User } from '../db/schema/user';
 
 export interface Token {
     type: string,
     data: any
 }
+
+let managers: User[];
+getManagers().then(x => managers = x);
 
 const parseDate = (dateString: string) => {
     try {
@@ -59,8 +62,8 @@ const filterToQuery = (filter: string, userId: number): Query => {
                 }
             case 'teacher':
                 return {
-                    type: 'manager',
-                    data: token[1]
+                    type: 'managerid',
+                    data: managers.find(x => x.displayCode === token[1])!.id
                 }
             case 'room':
                 return {
@@ -78,7 +81,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
     const keywords: string[] = [];
     let title: string | undefined;
     let location: string | undefined;
-    let manager: string | undefined;
+    let managerId: number | undefined;
     let after: Date | undefined;
     let before: Date | undefined;
     let subscribedUserId: number | undefined;
@@ -93,8 +96,8 @@ const filterToQuery = (filter: string, userId: number): Query => {
             case 'location':
                 location = token.data;
                 break;
-            case 'manager':
-                manager = token.data;
+            case 'managerid':
+                managerId = token.data;
                 break;
             case 'before':
                 if (!before || token.data < before) {
@@ -126,7 +129,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
         keywords,
         title,
         location,
-        manager,
+        managerId,
         after,
         before,
         subscribedUserId
