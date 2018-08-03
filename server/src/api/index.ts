@@ -25,6 +25,9 @@ router.use('/push', push);
 import admin = require('./admin');
 router.use('/admin', admin);
 
+import ical = require('./ical');
+router.use('/ical', ical);
+
 router.use((err, req, res, next) => {
     console.error(err);
     res.status(500).json({ error: err });

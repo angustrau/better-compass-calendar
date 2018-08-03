@@ -102,7 +102,9 @@ const cacheEvents = async (accessToken: AccessToken, start: Date, end: Date) => 
 
             if (currentDetails.hash !== newHash) {
                 const _event = await saveEvent(event);
-                await notification.notifyEventUpdate(_event);
+                if (event.start > new Date()) {
+                    await notification.notifyEventUpdate(_event);
+                }
             }
         } catch (error) {
             if (error === schema.errors.EVENT_NOT_FOUND) {

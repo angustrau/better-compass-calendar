@@ -24,6 +24,9 @@ const dataToLocation = (data): Location => {
 export const getLocation = async (x: number | string): Promise<Location> => {
     let data;
     if (typeof(x) === 'number') {
+        if (x === 0) {
+            x = 1;
+        }
         data = await db.get('SELECT id, full_name, short_name FROM Locations WHERE id = $1', x);
     } else if (typeof(x) === 'string') {
         data = await db.get('SELECT id, full_name, short_name FROM Locations WHERE short_name = $1', x);

@@ -1,6 +1,7 @@
 export default {
     site: {
-        name: 'Melbourne High School'
+        name: 'Melbourne High School',
+        hostname: 'bcc.angustrau.me'
     },
     apiEndpoint: '/api',
     push: {

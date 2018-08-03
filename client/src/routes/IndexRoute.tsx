@@ -12,6 +12,7 @@ import {
 } from 'reactstrap';
 import { IEventDetails } from '../api';
 import BCCBigCalendar, { View } from '../components/BCCBigCalendar';
+import BCCExportiCalModal from '../components/BCCExportiCalModal';
 import BCCFilterBox from '../components/BCCFilterBox';
 import BCCNavBar from '../components/BCCNavBar';
 import BCCEventDetailModal from './../components/BCCEventDetailModal';
@@ -30,6 +31,7 @@ interface IState {
     view: View;
     date: Date;
     showingEventId: string | null;
+    icalModalOpen: boolean;
 }
 
 class IndexRoute extends React.Component<IProps, IState> {
@@ -42,7 +44,8 @@ class IndexRoute extends React.Component<IProps, IState> {
             appliedFilter: initialFilter,
             view: 'day',
             date: new Date(),
-            showingEventId: this.props.match.params.eventid || null
+            showingEventId: this.props.match.params.eventid || null,
+            icalModalOpen: false
         }
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -57,10 +60,12 @@ class IndexRoute extends React.Component<IProps, IState> {
         this.handleDateChange = this.handleDateChange.bind(this);
         this.handleEventClick = this.handleEventClick.bind(this);
         this.handleCloseEventModal = this.handleCloseEventModal.bind(this);
+        this.handleOpenICalModal = this.handleOpenICalModal.bind(this);
+        this.handleCloseICalModal = this.handleCloseICalModal.bind(this);
     }
 
     public render() {
-        const { filter, appliedFilter, view, date, showingEventId } = this.state;
+        const { filter, appliedFilter, view, date, showingEventId, icalModalOpen } = this.state;
 
         return (
             <div className='IndexRoute-Root'>
@@ -75,7 +80,7 @@ class IndexRoute extends React.Component<IProps, IState> {
                                     <Button onClick={ this.handleFilterGo }>Go</Button>
                                 </InputGroupAddon>
                             </InputGroup>
-                            <Button>Export iCal</Button>
+                            <Button onClick={ this.handleOpenICalModal }>Export iCal</Button>
                         </div>
                         <div className='IndexRoute-ControlsRight'>
                             <h4>
@@ -110,6 +115,11 @@ class IndexRoute extends React.Component<IProps, IState> {
                     isOpen={ showingEventId !== null }
                     eventId={ showingEventId }
                     onClose={ this.handleCloseEventModal }
+                />
+                <BCCExportiCalModal 
+                    isOpen={ icalModalOpen } 
+                    filter={ appliedFilter } 
+                    onClose={ this.handleCloseICalModal }
                 />
             </div>
         );
@@ -193,6 +203,14 @@ class IndexRoute extends React.Component<IProps, IState> {
     private handleCloseEventModal() {
         this.props.history.replace('/');
         this.setState({ showingEventId: null });
+    }
+
+    private handleOpenICalModal() {
+        this.setState({ icalModalOpen: true });
+    }
+
+    private handleCloseICalModal() {
+        this.setState({ icalModalOpen: false });
     }
 }
 
