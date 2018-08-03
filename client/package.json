@@ -24,10 +24,9 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build && cra-append-sw ./src/custom-sw.js",
+    "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject",
-    "build-sw-dev": "cra-append-sw --mode dev --env .env-swbuild ./src/custom-sw.js"
+    "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
     "@types/jest": "^23.3.0",

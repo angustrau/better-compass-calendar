@@ -22,6 +22,5 @@ yarn-error.log*
 
 # Server
 /server/node_modules
-/server/build
 /server/src/db/database.sqlite
 /server/.env
