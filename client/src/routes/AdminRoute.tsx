@@ -9,6 +9,7 @@ import {
     TabContent,
     TabPane
 } from 'reactstrap';
+import BCCAdminStats from '../components/BCCAdminStats';
 import BCCNavBar from '../components/BCCNavBar';
 import * as user from '../user';
 import * as admin from './../admin';
@@ -32,6 +33,7 @@ class AdminRoute extends React.Component<IProps, IState> {
         }
 
         this.handleSendPush = this.handleSendPush.bind(this);
+        this.handleRunSQL = this.handleRunSQL.bind(this);
     }
 
     public render() {
@@ -46,27 +48,18 @@ class AdminRoute extends React.Component<IProps, IState> {
                 <div>
                     <Nav tabs={true}>
                         { this.renderTabLink('Stats') }
-                        { this.renderTabLink('Log') }
-                        { this.renderTabLink('Users') }
-                        { this.renderTabLink('Events') }
                         { this.renderTabLink('SQL') }
                         { this.renderTabLink('Push') }
                     </Nav>
                     <TabContent activeTab={ this.state.activeTab }>
                         <TabPane tabId='Stats'>
-                            Hello
-                        </TabPane>
-                        <TabPane tabId='Log'>
-                            Hello
-                        </TabPane>
-                        <TabPane tabId='Users'>
-                            Hello
-                        </TabPane>
-                        <TabPane tabId='Events'>
-                            Hello
+                            <BCCAdminStats />
                         </TabPane>
                         <TabPane tabId='SQL'>
-                            Hello
+                            Query:
+                            <Input type='textarea' id='AdminRoute-SQL-Query' />
+                            <Button onClick={ this.handleRunSQL }>Run</Button>
+                            <div id='AdminRoute-SQL-Result' />
                         </TabPane>
                         <TabPane tabId='Push'>
                             User ID:
@@ -103,6 +96,13 @@ class AdminRoute extends React.Component<IProps, IState> {
         const userIdInput = document.getElementById('AdminRoute-Push-UserID') as HTMLInputElement;
         const dataInput = document.getElementById('AdminRoute-Push-Data') as HTMLInputElement;
         admin.sendPush(parseInt(userIdInput.value, 10), JSON.parse(dataInput.value));
+    }
+
+    private async handleRunSQL() {
+        const queryInput = document.getElementById('AdminRoute-SQL-Query') as HTMLInputElement;
+        const resultInput = document.getElementById('AdminRoute-SQL-Result') as HTMLInputElement;
+        const result = await admin.runSQL(queryInput.value);
+        resultInput.innerText = JSON.stringify(result, null, 2);
     }
 }
 

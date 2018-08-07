@@ -5,5 +5,5 @@ export import activity = require('./activity');
 export import event = require('./event');
 export import subscriptions = require('./subscriptions');
 export import push = require('./push');
-export import requestlog = require('./requestlog');
+export import logging = require('./logging');
 export import errors = require('./errors');

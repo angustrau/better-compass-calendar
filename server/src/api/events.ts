@@ -2,6 +2,7 @@ import express = require('express');
 const router = express.Router();
 import auth = require('./../auth');
 import events = require('./../events');
+import schema = require('./../db/schema');
 import { Query } from '../db/schema/event';
 
 router.post('/query', auth.authenticate, async (req, res, next) => {
@@ -15,6 +16,7 @@ router.post('/query', auth.authenticate, async (req, res, next) => {
         res.json({
             events: await events.query(query, req.token)
         });
+        schema.logging.query(req.user);
     } catch (error) {
         next(error);
     }

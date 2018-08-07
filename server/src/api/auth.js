@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const auth = require("./../auth");
 const events = require("./../events");
+const schema = require("./../db/schema");
 router.post('/token', async (req, res, next) => {
     try {
         let { username, password } = req.body;
@@ -12,6 +13,7 @@ router.post('/token', async (req, res, next) => {
         const token = await auth.generateToken(username, password);
         // Post-login tasks
         await events.cacheEventsFortnight(token);
+        schema.logging.login(token.userId);
         res.json({
             token: token.token,
             expires: token.expires

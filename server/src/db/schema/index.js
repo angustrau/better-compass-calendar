@@ -7,6 +7,6 @@ exports.activity = require("./activity");
 exports.event = require("./event");
 exports.subscriptions = require("./subscriptions");
 exports.push = require("./push");
-exports.requestlog = require("./requestlog");
+exports.logging = require("./logging");
 exports.errors = require("./errors");
 //# sourceMappingURL=index.js.map

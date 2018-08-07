@@ -7,7 +7,7 @@ export const initDB = async () => {
     db = await open('./db/database.sqlite', { promise: Promise });
     console.log('Opened SQLite database');
     await db.migrate({
-        force: config.environment === 'dev' ? 'last' : undefined, 
+        // force: config.environment === 'dev' ? 'last' : undefined, 
         migrationsPath: './db/migrations'
     });
     console.log('Completed SQL migration');

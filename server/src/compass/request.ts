@@ -63,7 +63,7 @@ let _request = async (uri: string, options: rr.RequestRetryOptions): Promise<Res
                 res.timings ? res.timings.response : null
             );
             if (res.timings) {
-                schema.requestlog.log(res.request.method, res.request.path, res.timings.response);
+                schema.logging.request(res.request.method, res.request.path, res.timings.response);
             }
 
             resolve(res);

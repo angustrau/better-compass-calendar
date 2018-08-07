@@ -9,3 +9,8 @@ export const sendPush = async (userId: number, data: IPushMessage, token: IAcces
         data
     }, token);
 }
+
+export const runSQL = async (query: string, token: IAccessToken) => {
+    const response = await apiRequest('POST', '/admin/sql', { query }, token);
+    return response.result;
+}

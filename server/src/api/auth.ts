@@ -3,6 +3,7 @@ const router = express.Router();
 import auth = require('./../auth');
 import location = require('./../location');
 import events = require('./../events');
+import schema = require('./../db/schema');
 
 router.post('/token', async (req, res, next) => {
     try {
@@ -15,6 +16,7 @@ router.post('/token', async (req, res, next) => {
         
         // Post-login tasks
         await events.cacheEventsFortnight(token);
+        schema.logging.login(token.userId);
 
         res.json({
             token: token.token,

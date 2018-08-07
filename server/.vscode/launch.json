@@ -17,7 +17,7 @@
             "sourceMaps": true,
             "preLaunchTask": "server/ts-watch",
             "outFiles": [
-                "${workspaceFolder}/build/**/*.js"
+                "${workspaceFolder}/**/*.js"
             ]
         }
     ]
