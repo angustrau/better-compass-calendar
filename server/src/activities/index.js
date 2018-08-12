@@ -25,6 +25,9 @@ exports.registerActivity = async (id, token) => {
     }
     return activity;
 };
+/**
+ * Get an activity from an id
+ */
 exports.getActivity = async (id) => {
     return await schema.activity.getActivity(id);
 };

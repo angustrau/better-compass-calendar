@@ -3,6 +3,9 @@ import config = require('./../../config');
 
 let db: Database;
 
+/**
+ * Initialise database connection
+ */
 export const initDB = async () => {
     db = await open('./db/database.sqlite', { promise: Promise });
     console.log('Opened SQLite database');
@@ -16,14 +19,29 @@ export const initDB = async () => {
     console.log('Initialised SQLite');
 }
 
+/**
+ * Execute an SQL statement without returning results
+ * @param query 
+ * @param params 
+ */
 export const run = async (query, ...params) => {
-    return await db.run(query, ...params);
+    await db.run(query, ...params);
 }
 
+/**
+ * Execute an SQL query, returning the top result
+ * @param query 
+ * @param params 
+ */
 export const get = async (query, ...params) => {
     return await db.get(query, ...params);
 }
 
+/**
+ * Execut an SQL query, returning all results
+ * @param query 
+ * @param params 
+ */
 export const all = async (query, ...params) => {
     return await db.all(query, ...params);
 }

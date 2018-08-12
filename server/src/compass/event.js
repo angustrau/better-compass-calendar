@@ -2,6 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const request = require("./request");
 const errors = require("./errors");
+/**
+ * Converts a date to a string as required by Compass
+ */
 const toDateString = (date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -36,7 +39,9 @@ exports.getEventsByUser = async (id, startDate, endDate, authToken) => {
             const start = new Date(x.start);
             const finish = new Date(x.finish);
             return Object.assign({}, x, { start,
-                finish, allDay: (finish.getTime() - start.getTime()) / 3.6e6 > 7 });
+                finish, 
+                // Check if the event goes for more than 7 hours
+                allDay: (finish.getTime() - start.getTime()) / 3.6e6 > 7 });
         });
     }
     else {
@@ -46,6 +51,11 @@ exports.getEventsByUser = async (id, startDate, endDate, authToken) => {
         throw errors.INVALID_TOKEN;
     }
 };
+/**
+ * Get the extended details for an event
+ * @param event
+ * @param authToken
+ */
 exports.getExtendedEventDetails = async (event, authToken) => {
     let response = await request('/Services/Activity.svc/GetLessonsByInstanceIdQuick?sessionstate=readonly', {
         method: 'POST',

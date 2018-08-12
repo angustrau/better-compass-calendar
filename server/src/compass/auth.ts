@@ -49,7 +49,6 @@ export const login = async (username: string, password: string): Promise<AuthTok
 
         return new AuthToken(userId, cookieJar);
     } else {
-        // Authentication fail, login page refreshed
         throw errors.INVALID_USERNAME_PASSWORD;
     }
 }

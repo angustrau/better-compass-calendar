@@ -27,6 +27,9 @@ export const registerActivity = async (id: number, token: AccessToken): Promise<
     return activity;
 }
 
+/**
+ * Get an activity from an id
+ */
 export const getActivity = async (id: number) => {
     return await schema.activity.getActivity(id);
 }

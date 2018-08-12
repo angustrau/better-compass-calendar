@@ -30,6 +30,7 @@ exports.registerUser = async (id, token) => {
             };
             await schema.user.saveUser(user);
             if (id === token.userId) {
+                // Registering a user that is logging in for the first time
                 await location.cacheLocations(token);
                 await events.cacheEventsYear(token);
                 const classes = await compass.user.getClasses(token.compassToken);
@@ -60,6 +61,9 @@ exports.getDetails = async (id) => {
 exports.deleteUser = async (id) => {
     await schema.user.deleteUser(id);
 };
+/**
+ * Get a list of all managers
+ */
 exports.getManagers = async () => {
     return await schema.user.getManagers();
 };

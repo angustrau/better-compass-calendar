@@ -2,6 +2,9 @@ import db = require('./../../db');
 import errors = require('./errors');
 import SqlString = require('sqlstring');
 
+/**
+ * Information stored about an event
+ */
 export interface Event {
     id: string;
     title: string;
@@ -17,6 +20,9 @@ export interface Event {
     hash: string;
 }
 
+/**
+ * A query for events to be ran
+ */
 export interface Query {
     keywords?: string[];
     title?: string;
@@ -32,6 +38,9 @@ export interface Query {
 
 const columns = 'id, title, description, activity_id, location_id, manager_id, all_day, cancelled, start_time, end_time, has_changed, hash';
 
+/**
+ * Converts database response to Event
+ */
 const formatData = (data: any): Event => {
     return {
         id: data.id,
@@ -87,13 +96,22 @@ export const saveEvent = async (event: Event) => {
     );
 }
 
+/**
+ * Escapes user input into an SQL safe string
+ * @param text 
+ */
 const escape = (text: any) => {
     const escaped = SqlString.escape(text.toString());
     const escapedWithoutQuotes = escaped.substring(1, escaped.length - 1);
     return '"' + escapedWithoutQuotes.replace(/\\"/g, '""').replace(/\\'/g, "''") + '"';
 }
 
+/**
+ * Perform a query for events
+ * @param query 
+ */
 export const queryEvents = async (query: Query): Promise<Event[]> => {
+    // Assemble simple filters into query
     let filters: string[] = [];
     if (query.keywords && query.keywords.length > 0) filters.push(`${escape(query.keywords.join(' '))}`);
     if (query.title)      filters.push(`(title : ${escape(query.title)})`);
@@ -102,6 +120,7 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
     if (query.manager)    filters.push(`(manager_full : ${escape(query.manager)})`);
     if (query.managerId)  filters.push(`(manager_id : ${escape(query.managerId)})`);
 
+    // Assemble the SQL statement
     let sql = `SELECT ${columns} from Events WHERE 1=1`;
     sql += filters.length > 0 ? ` AND id IN (SELECT id FROM EventsIndex WHERE EventsIndex MATCH '${filters.join(' AND ')}' ORDER BY rank)` : '';
     sql += query.subscribedUserId ? ` AND activity_id IN (SELECT activity_id FROM Subscriptions WHERE user_id = $subscribedUserId)` : '';
@@ -109,6 +128,7 @@ export const queryEvents = async (query: Query): Promise<Event[]> => {
     sql += query.before ? ` AND (end_time <= $before)` : '';
     sql += query.orderBy === 'latest' ? ' ORDER BY start_time DESC' : query.orderBy === 'oldest' ? ' ORDER BY start_time ASC' : '';
     
+    // Performn the SQL query, passing in named parameters
     const results = await db.all(
         sql, 
         {

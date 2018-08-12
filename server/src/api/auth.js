@@ -4,6 +4,10 @@ const router = express.Router();
 const auth = require("./../auth");
 const events = require("./../events");
 const schema = require("./../db/schema");
+/**
+ * POST /api/auth/token
+ * Get an authorisation token (log in)
+ */
 router.post('/token', async (req, res, next) => {
     try {
         let { username, password } = req.body;
@@ -23,6 +27,10 @@ router.post('/token', async (req, res, next) => {
         next(error);
     }
 });
+/**
+ * DELETE /api/auth/token
+ * Unauthorise a token (log out)
+ */
 router.delete('/token', auth.authenticate, async (req, res, next) => {
     try {
         await auth.revokeToken(req.token);

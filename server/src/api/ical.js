@@ -4,8 +4,13 @@ const router = express.Router();
 const ical = require("./../ical");
 const auth = require("./../auth");
 const basicauth = require("basic-auth");
+/**
+ * GET /api/ical/:filter/schedule.ics
+ * Gets an iCal calendar from a filter
+ */
 router.get('/:filter/*', async (req, res, next) => {
     try {
+        // Ensure that HTTP Basic Auth credentials are provided
         const creds = basicauth(req);
         if (!creds) {
             res.status(401);

@@ -1,12 +1,19 @@
 import db = require('./../../db');
 import errors = require('./errors');
 
+/**
+ * Information about a location
+ */
 export interface Location {
     id: number;
     fullName: string;
     shortName: string;
 }
 
+/**
+ * Converts database response to location
+ * @param data 
+ */
 const dataToLocation = (data): Location => {
     return {
         id: data.id,
@@ -17,6 +24,7 @@ const dataToLocation = (data): Location => {
 
 /**
  * Gets location data from the DB
+ * Either pass in an id (number) or the short name (string)
  * @async
  * @param {number | string} x Location ID or short name
  * @returns {Promise<Location>}
@@ -53,6 +61,9 @@ export const saveLocation = async (location: Location) => {
     );
 }
 
+/**
+ * Get a list of all locations from the DB
+ */
 export const getAllLocations = async () => {
     const data = await db.all('SELECT id, full_name, short_name FROM Locations');
     return data.map(location => dataToLocation(location));

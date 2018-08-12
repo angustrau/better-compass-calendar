@@ -2,6 +2,9 @@ import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
 
+/**
+ * Event details API response
+ */
 export interface EventDetails {
     '__type': string;
     'activityId': number;
@@ -25,6 +28,9 @@ export interface EventDetails {
     'title': string;
 }
 
+/**
+ * Converts a date to a string as required by Compass
+ */
 const toDateString = (date: Date) => {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0')
@@ -65,7 +71,8 @@ export const getEventsByUser = async (id: number, startDate: Date, endDate: Date
                 ...x,
                 start,
                 finish,
-                allDay: (finish.getTime() - start.getTime()) / 3.6e6 > 7
+                // Check if the event goes for more than 7 hours
+                allDay: (finish.getTime() - start.getTime()) / 3.6e6 > 7 
             }
         });
     } else {
@@ -76,6 +83,9 @@ export const getEventsByUser = async (id: number, startDate: Date, endDate: Date
     }
 }
 
+/**
+ * Event location details API response
+ */
 export interface EventLocationDetails {
     "__type": string;
     "archived": boolean;
@@ -99,6 +109,9 @@ export interface EventLocationDetails {
     "shortName": string;
 }
 
+/**
+ * Extended event details API response
+ */
 export interface ExtendedEventDetails {
     "__type": string;
     "ActivityDisplayName": string;
@@ -169,6 +182,11 @@ export interface ExtendedEventDetails {
     "wsv": string;
 }
 
+/**
+ * Get the extended details for an event
+ * @param event 
+ * @param authToken 
+ */
 export const getExtendedEventDetails = async (event: EventDetails, authToken: AuthToken) => {
     let response = await request('/Services/Activity.svc/GetLessonsByInstanceIdQuick?sessionstate=readonly', {
         method: 'POST',

@@ -31,6 +31,10 @@ export const generateToken = async (username: string, password: string) => {
     return token;
 }
 
+/**
+ * De-authorises a token
+ * @param token 
+ */
 export const revokeToken = async (token: AccessToken) => {
     await schema.accessToken.revokeToken(token.token);
 }

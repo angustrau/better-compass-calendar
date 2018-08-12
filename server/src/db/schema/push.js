@@ -1,12 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("./../../db");
+/**
+ * Add a push subscription to the database
+ * @param subscription
+ */
 exports.subscribe = async (subscription) => {
     await db.run('INSERT INTO PushSubscriptions (user_id, device_name, endpoint, key_p256dh, key_auth) VALUES ($1,$2,$3,$4,$5)', subscription.userId, subscription.deviceName, subscription.endpoint, subscription.keys.p256dh, subscription.keys.auth);
 };
+/**
+ * Remove a push subscription from the database
+ * @param subscription
+ */
 exports.unsubscribe = async (subscription) => {
     await db.run('DELETE FROM PushSubscriptions WHERE endpoint = $1', subscription.endpoint);
 };
+/**
+ * Get all push subscriptions for a user
+ * @param user
+ */
 exports.getSubscriptions = async (user) => {
     const data = await db.all('SELECT user_id, device_name, endpoint, key_p256dh, key_auth FROM PushSubscriptions WHERE user_id = $1', user.id);
     return data.map((subscription) => {

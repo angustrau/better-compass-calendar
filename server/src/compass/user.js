@@ -29,6 +29,10 @@ exports.getDetails = async (id, authToken) => {
         throw errors.INVALID_TOKEN;
     }
 };
+/**
+ * Gets a list of classes for a user
+ * @param authToken
+ */
 exports.getClasses = async (authToken) => {
     let response = await request('/Services/Subjects.svc/GetStandardClassesOfUserInAcademicGroup', {
         method: 'POST',
@@ -50,6 +54,11 @@ exports.getClasses = async (authToken) => {
         throw errors.INVALID_TOKEN;
     }
 };
+/**
+ * Get a list of the user's main activities
+ * Simpler than getClasses()
+ * @param authToken
+ */
 exports.getActivities = async (authToken) => {
     let response = await request('/', {
         method: 'GET',

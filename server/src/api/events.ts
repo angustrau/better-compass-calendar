@@ -5,6 +5,10 @@ import events = require('./../events');
 import schema = require('./../db/schema');
 import { Query } from '../db/schema/event';
 
+/**
+ * POST /api/events/query
+ * Query for events
+ */
 router.post('/query', auth.authenticate, async (req, res, next) => {
     try {
         const query: Query = {
@@ -22,6 +26,10 @@ router.post('/query', auth.authenticate, async (req, res, next) => {
     }
 });
 
+/**
+ * POST /api/events/details
+ * Get detailed information about an event
+ */
 router.post('/details', auth.authenticate, async (req, res, next) => {
     try {
         res.json(await events.getEvent(req.body.id));

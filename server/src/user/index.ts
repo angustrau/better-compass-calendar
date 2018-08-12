@@ -32,6 +32,7 @@ export const registerUser = async (id: number, token: AccessToken): Promise<User
             await schema.user.saveUser(user);
 
             if (id === token.userId) {
+                // Registering a user that is logging in for the first time
                 await location.cacheLocations(token);
                 await events.cacheEventsYear(token);
                 const classes = await compass.user.getClasses(token.compassToken);
@@ -65,6 +66,9 @@ export const deleteUser = async (id: number) => {
     await schema.user.deleteUser(id);
 }
 
+/**
+ * Get a list of all managers
+ */
 export const getManagers = async () => {
     return await schema.user.getManagers();
 }

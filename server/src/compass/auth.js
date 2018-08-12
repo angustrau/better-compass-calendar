@@ -45,7 +45,6 @@ exports.login = async (username, password) => {
         return new AuthToken(userId, cookieJar);
     }
     else {
-        // Authentication fail, login page refreshed
         throw errors.INVALID_USERNAME_PASSWORD;
     }
 };

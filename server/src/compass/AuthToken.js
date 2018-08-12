@@ -3,6 +3,9 @@ const tough = require("tough-cookie");
 const config = require("./../../config");
 const errors = require("./errors");
 const request = require("request");
+/**
+ * A Compass authentication token
+ */
 class AuthToken {
     /**
      * Creates a Compass authentication token

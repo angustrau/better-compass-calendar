@@ -26,6 +26,10 @@ exports.generateToken = async (username, password) => {
     await schema.accessToken.saveToken(token);
     return token;
 };
+/**
+ * De-authorises a token
+ * @param token
+ */
 exports.revokeToken = async (token) => {
     await schema.accessToken.revokeToken(token.token);
 };

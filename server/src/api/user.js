@@ -3,6 +3,10 @@ const express = require("express");
 const router = express.Router();
 const auth = require("./../auth");
 const user = require("./../user");
+/**
+ * GET /api/user/details
+ * Get details about the user
+ */
 router.get('/details', auth.authenticate, async (req, res, next) => {
     try {
         res.json(await user.getDetails(req.user.id));
@@ -11,6 +15,10 @@ router.get('/details', auth.authenticate, async (req, res, next) => {
         next(error);
     }
 });
+/**
+ * DELETE /api/user
+ * Delete the user account
+ */
 router.delete('/', auth.authenticate, async (req, res, next) => {
     try {
         await user.deleteUser(req.user.id);
@@ -20,6 +28,10 @@ router.delete('/', auth.authenticate, async (req, res, next) => {
         next(error);
     }
 });
+/**
+ * GET /api/user/managers
+ * Get a list of all manager information
+ */
 router.get('/managers', auth.authenticate, async (req, res, next) => {
     try {
         res.json({

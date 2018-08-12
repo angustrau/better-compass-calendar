@@ -1,6 +1,9 @@
 import db = require('./../../db');
 import errors = require('./errors');
 
+/**
+ * Information about a User
+ */
 export interface User {
     id: number;
     displayCode: string;
@@ -10,6 +13,10 @@ export interface User {
     isAdmin: boolean;
 }
 
+/**
+ * Converts a database response to a user
+ * @param data 
+ */
 const dataToUser = (data): User => {
     return {
         id: data.id, 

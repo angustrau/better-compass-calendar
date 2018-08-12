@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("./../../db");
 const errors = require("./errors");
+/**
+ * Converts a database response to a user
+ * @param data
+ */
 const dataToUser = (data) => {
     return {
         id: data.id,

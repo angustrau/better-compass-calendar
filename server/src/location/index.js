@@ -22,9 +22,16 @@ exports.cacheLocations = async (accessToken) => {
     await Promise.all(locations.map(x => schema.location.saveLocation(x)));
     cachedLocations = true;
 };
+/**
+ * Get location details from id
+ * @param id
+ */
 exports.getLocation = async (id) => {
     return await schema.location.getLocation(id);
 };
+/**
+ * Get a list of all location details
+ */
 exports.getAlllocations = async () => {
     return await schema.location.getAllLocations();
 };

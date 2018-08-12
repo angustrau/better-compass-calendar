@@ -9,6 +9,9 @@ declare module 'request' {
     }
 }
 
+/**
+ * A Compass authentication token
+ */
 class AuthToken {
     jar: request.CookieJar;
     id: number;

@@ -27,10 +27,17 @@ export const cacheLocations = async (accessToken: AccessToken) => {
     cachedLocations = true;
 }
 
+/**
+ * Get location details from id
+ * @param id
+ */
 export const getLocation = async (id: number) => {
     return await schema.location.getLocation(id);
 }
 
+/**
+ * Get a list of all location details
+ */
 export const getAlllocations = async () => {
     return await schema.location.getAllLocations();
 }

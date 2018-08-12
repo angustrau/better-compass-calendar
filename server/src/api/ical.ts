@@ -2,11 +2,15 @@ import express = require('express');
 const router = express.Router();
 import ical = require('./../ical');
 import auth = require('./../auth');
-import schema = require('./../db/schema');
 import basicauth = require('basic-auth');
 
+/**
+ * GET /api/ical/:filter/schedule.ics
+ * Gets an iCal calendar from a filter
+ */
 router.get('/:filter/*', async (req, res, next) => {
     try {
+        // Ensure that HTTP Basic Auth credentials are provided
         const creds = basicauth(req);
         if (!creds) {
             res.status(401);

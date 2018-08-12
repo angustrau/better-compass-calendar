@@ -4,6 +4,10 @@ import auth = require('./../auth');
 import subscriptions = require('./../subscriptions');
 import activities = require('./../activities');
 
+/**
+ * GET /api/subscriptions
+ * Get subscribed activities
+ */
 router.get('/', auth.authenticate, async (req, res, next) => {
     try {
         res.json({ subscriptions: await subscriptions.getSubscriptions(req.user) });
@@ -12,6 +16,10 @@ router.get('/', auth.authenticate, async (req, res, next) => {
     }
 });
 
+/**
+ * POST /api/subscriptions/subscribe
+ * Subscribe to an activity
+ */
 router.post('/subscribe', auth.authenticate, async (req, res, next) => {
     try {
         await subscriptions.subscribe(req.user, await activities.getActivity(req.body.activity));
@@ -21,6 +29,10 @@ router.post('/subscribe', auth.authenticate, async (req, res, next) => {
     }
 });
 
+/**
+ * POST /api/subscriptions/unsubscribe
+ * Unsubscribe from an activity
+ */
 router.post('/unsubscribe', auth.authenticate, async (req, res, next) => {
     try {
         await subscriptions.unsubscribe(req.user, await activities.getActivity(req.body.activity));

@@ -2,6 +2,9 @@ import request = require('./request');
 import AuthToken = require('./AuthToken');
 import errors = require('./errors');
 
+/**
+ * Location details API response
+ */
 interface CompassLocation {
     '__type': string;
     'building': string | undefined;

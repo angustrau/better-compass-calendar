@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const db = require("./../../db");
 const errors = require("./errors");
+/**
+ * Converts database response to location
+ * @param data
+ */
 const dataToLocation = (data) => {
     return {
         id: data.id,
@@ -11,6 +15,7 @@ const dataToLocation = (data) => {
 };
 /**
  * Gets location data from the DB
+ * Either pass in an id (number) or the short name (string)
  * @async
  * @param {number | string} x Location ID or short name
  * @returns {Promise<Location>}
@@ -39,6 +44,9 @@ exports.getLocation = async (x) => {
 exports.saveLocation = async (location) => {
     await db.run('REPLACE INTO Locations (id, full_name, short_name) VALUES ($1,$2,$3)', location.id, location.fullName, location.shortName);
 };
+/**
+ * Get a list of all locations from the DB
+ */
 exports.getAllLocations = async () => {
     const data = await db.all('SELECT id, full_name, short_name FROM Locations');
     return data.map(location => dataToLocation(location));

@@ -3,6 +3,9 @@ import AuthToken = require('./AuthToken');
 import errors = require('./errors');
 import cheerio = require('cheerio');
 
+/**
+ * User details API response
+ */
 interface UserDetails {
     '__type': string | null;
     'userDetails': string | null;
@@ -26,6 +29,9 @@ interface UserDetails {
     'userYearLevelId': number | null;
 }
 
+/**
+ * Class details API response
+ */
 interface ClassDetails {
     '__type': string;
     'attendanceModeDefault': number | null;
@@ -81,6 +87,10 @@ export const getDetails = async (id: number, authToken: AuthToken): Promise<User
     }
 }
 
+/**
+ * Gets a list of classes for a user
+ * @param authToken 
+ */
 export const getClasses = async (authToken: AuthToken): Promise<ClassDetails[]> => {
     let response = await request('/Services/Subjects.svc/GetStandardClassesOfUserInAcademicGroup', {
         method: 'POST',
@@ -107,10 +117,18 @@ export const getClasses = async (authToken: AuthToken): Promise<ClassDetails[]> 
     }
 }
 
+/** 
+ * Activity details API response 
+ */
 interface ActivityDetails {
     id: number;
 }
 
+/**
+ * Get a list of the user's main activities
+ * Simpler than getClasses()
+ * @param authToken 
+ */
 export const getActivities = async (authToken: AuthToken): Promise<ActivityDetails[]> => {
     let response = await request('/', {
         method: 'GET',

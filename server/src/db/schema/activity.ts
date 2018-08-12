@@ -1,6 +1,9 @@
 import db = require('./../../db');
 import errors = require('./errors');
 
+/**
+ * An activity (collection of events)
+ */
 export interface Activity {
     id: number;
 }

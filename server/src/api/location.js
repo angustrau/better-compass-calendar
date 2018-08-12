@@ -3,6 +3,10 @@ const express = require("express");
 const router = express.Router();
 const auth = require("./../auth");
 const location = require("./../location");
+/**
+ * POST /api/location/details
+ * Get details about a location
+ */
 router.post('/details', auth.authenticate, async (req, res, next) => {
     try {
         res.json(await location.getLocation(req.body.id));
@@ -11,6 +15,10 @@ router.post('/details', auth.authenticate, async (req, res, next) => {
         next(error);
     }
 });
+/**
+ * GET /api/location/all
+ * Get the details of all locations
+ */
 router.get('/all', auth.authenticate, async (req, res, next) => {
     try {
         res.json({

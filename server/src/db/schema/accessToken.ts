@@ -2,6 +2,9 @@ import db = require('./../../db');
 import errors = require('./errors');
 import AuthToken = require('./../../compass/AuthToken');
 
+/**
+ * A BCC access token
+ */
 export interface AccessToken {
     token: string;
     expires: Date;

@@ -6,9 +6,13 @@ export interface Token {
     data: any
 }
 
+/** A list of all managers */
 let managers: User[];
 getManagers().then(x => managers = x);
 
+/**
+ * Validate and parse an inputted date
+ */
 const parseDate = (dateString: string) => {
     try {
         const [year, month, date] = dateString.split('-');
@@ -18,12 +22,18 @@ const parseDate = (dateString: string) => {
     }
 }
 
+/**
+ * Validate and parse a user defined filter into a query
+ */
 const filterToQuery = (filter: string, userId: number): Query => {
+    // Split the filter into tokens
     const tokens = filter.trim()
     .split(' ')
     .map((word): Token => {
         const token = word.split(':');
 
+        // Special case for the  "subscribed" token
+        // It does not have a parameter
         if (token[0] === 'subscribed') {
             return {
                 type: 'subscribed',
@@ -31,6 +41,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
             }
         }
 
+        // If a token does not have a parameter, treat it as a keyword
         if (!token[1]) {
             return {
                 type: 'keyword',
@@ -38,6 +49,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
             }
         }
 
+        // Parse each of the different token types
         const date = parseDate(token[1]);
         switch (token[0]) {
             case 'before':
@@ -85,6 +97,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
     let after: Date | undefined;
     let before: Date | undefined;
     let subscribedUserId: number | undefined;
+    // Iterate through the tokens and find the intersection of all of them
     tokens.forEach((token) => {
         switch (token.type) {
             case 'keyword':
@@ -125,6 +138,7 @@ const filterToQuery = (filter: string, userId: number): Query => {
         }
     });
 
+    // Return the intersection of all tokens as a query
     return {
         keywords,
         title,
