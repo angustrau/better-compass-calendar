@@ -6,6 +6,9 @@ import CustomEventTarget from './utils/CustomEventTarget';
 export const events = new CustomEventTarget();
 
 let subscriptions: number[] = [];
+/**
+ * Refresh the list of activities the user is subscribed to
+ */
 const updateSubscriptions = async () => {
     if (auth.isAuthenticated()) {
         subscriptions = await api.getAllSubscriptions(auth.getToken()!);
@@ -14,9 +17,12 @@ const updateSubscriptions = async () => {
 
 export const init = () => {
     auth.events.addEventListener('post-login', updateSubscriptions);
-    // updateSubscriptions();
 }
 
+/**
+ * Subscribe the user to an activity
+ * @param activity 
+ */
 export const subscribe = async (activity: number) => {
     if (auth.isAuthenticated()) {
         await api.subscribe(activity, auth.getToken()!);
@@ -27,6 +33,10 @@ export const subscribe = async (activity: number) => {
     }
 }
 
+/**
+ * Unsubscribe the user from an activity
+ * @param activity 
+ */
 export const unsubscribe = async (activity: number) => {
     if (auth.isAuthenticated()) {
         await api.unsubscribe(activity, auth.getToken()!);
@@ -38,6 +48,9 @@ export const unsubscribe = async (activity: number) => {
     }
 }
 
+/**
+ * Checks the subscription state of an activity
+ */
 export const isSubscribed = (activity: number) => {
     return subscriptions.indexOf(activity) !== -1;
 }

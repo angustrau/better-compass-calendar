@@ -6,15 +6,26 @@ import {
 import * as admin from './../admin';
 
 interface IState {
+    /** The number of users recorded */
     users: number;
+    /** The number of students registered */
     students: number;
+    /** The number of teachers recorded */
     teachers: number;
+    /** The number of events recorded */
     events: number;
+    /** The number of logins recorded */
     logins: number;
+    /** The number of queries reqorded */
     queries: number;
+    /** The number of outbound requests recorded to Compass */
     requests: number;
 }
 
+/**
+ * BCCAdminStats
+ * Renders the stats tab in the admin panel
+ */
 class BCCAdminStats extends React.Component<object, IState> {
     constructor(props: any) {
         super(props);
@@ -31,11 +42,15 @@ class BCCAdminStats extends React.Component<object, IState> {
     }
 
     public render() {
+        // The amount of requests the official Compass client will have made (approx)
+        // An average of 14 requests are made on every login
         const estimatedCompassRequests = (this.state.logins * 14) + this.state.queries;
         const stats = {
             ...this.state,
             estimated_compass_requests: estimatedCompassRequests,
+            /** An estimated number of requests that weren't required */
             requests_saved: estimatedCompassRequests - this.state.requests,
+            /** % less requests made */
             requests_saved_percent: (100 - (this.state.requests / estimatedCompassRequests * 100)).toFixed(2)
         };
 
@@ -45,8 +60,8 @@ class BCCAdminStats extends React.Component<object, IState> {
                 { statNames.map((stat, key) => {
                     return (
                         <ListGroupItem key={ key } style={{ display: 'flex' }}>
-                            <span className='BCCAdminStats-Name'>{ stat }</span>
-                            <span className='BCCAdminStats-Value' style={{ marginLeft: 'auto' }}>{ stats[stat] }</span>
+                            <span>{ stat }</span>
+                            <span style={{ marginLeft: 'auto' }}>{ stats[stat] }</span>
                         </ListGroupItem>
                     );
                 }) }
@@ -55,6 +70,7 @@ class BCCAdminStats extends React.Component<object, IState> {
     }
 
     public async componentDidMount() {
+        // On load, collect statistics directly from the database
         admin.runSQL('SELECT COUNT(*) FROM Users').then((result) => this.setState({ users: result[0]['COUNT(*)'] }));
         admin.runSQL('SELECT COUNT(*) FROM Users WHERE is_manager = 0').then((result) => this.setState({ students: result[0]['COUNT(*)'] }));
         admin.runSQL('SELECT COUNT(*) FROM Users WHERE is_manager = 1').then((result) => this.setState({ teachers: result[0]['COUNT(*)'] }));

@@ -34,10 +34,15 @@ interface IState {
     icalModalOpen: boolean;
 }
 
+/**
+ * IndexRoute
+ * Renders the main page and detailed event view
+ */
 class IndexRoute extends React.Component<IProps, IState> {
     constructor(props: any) {
         super(props);
 
+        // Retrieve the filter from the url if applied
         const initialFilter = this.props.match.url === '/f/' ? '' : decodeURIComponent(this.props.match.params.filter || 'subscribed ');
         this.state = {
             filter: initialFilter,
@@ -125,6 +130,9 @@ class IndexRoute extends React.Component<IProps, IState> {
         );
     }
 
+    /**
+     * Called when the filter is changed
+     */
     private handleFilterChange(filter: string) {
         this.setState({ filter });
 
@@ -156,35 +164,15 @@ class IndexRoute extends React.Component<IProps, IState> {
     }
 
     private handlePrevClick() {
+        // Move back one time period
         const { view, date } = this.state;
-
-        switch (view) {
-            case 'day':
-                this.setState({ date: dateMath.subtract(date, 1, 'day') });
-                break;
-            case 'week':
-                this.setState({ date: dateMath.subtract(date, 1, 'week') });
-                break;
-            case 'month':
-                this.setState({ date: dateMath.subtract(date, 1, 'month') });
-                break;
-        }
+        this.setState({ date: dateMath.subtract(date, 1, view) });
     }
 
     private handleNextClick() {
+        // Move forward one time period
         const { view, date } = this.state;
-
-        switch (view) {
-            case 'day':
-                this.setState({ date: dateMath.add(date, 1, 'day') });
-                break;
-            case 'week':
-                this.setState({ date: dateMath.add(date, 1, 'week') });
-                break;
-            case 'month':
-                this.setState({ date: dateMath.add(date, 1, 'month') });
-                break;
-        }
+        this.setState({ date: dateMath.add(date, 1, view) });
     }
 
     private handleViewChange(view: View) {
@@ -196,6 +184,7 @@ class IndexRoute extends React.Component<IProps, IState> {
     }
 
     private handleEventClick(event: IEventDetails) {
+        // Navigate to event view
         this.props.history.replace('/e/' + event.id);
         this.setState({ showingEventId: event.id });
     }

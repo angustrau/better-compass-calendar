@@ -1,6 +1,9 @@
 import apiRequest from './apiRequest';
 import { IAccessToken } from './auth';
 
+/**
+ * Information stored about an event
+ */
 export interface IEventDetails {
     id: string;
     title: string;
@@ -16,6 +19,9 @@ export interface IEventDetails {
     hash: string;
 }
 
+/**
+ * A query to be run against the event database
+ */
 export interface IQuery {
     keywords?: string[];
     title?: string;
@@ -30,7 +36,14 @@ export interface IQuery {
 
 }
 
-export const queryEvents = async (query: IQuery, token: IAccessToken) => {
+/**
+ * Query for events
+ * @async
+ * @param {IQuery} query
+ * @param {IAccessToken} token An authorisation token
+ * @returns {Promise<IEventDetails[]>} The result of the query
+ */
+export const queryEvents = async (query: IQuery, token: IAccessToken): Promise<IEventDetails[]> => {
     const response: { events: any[] } = await apiRequest('POST', '/events/query', query, token);
     return response.events.map((event): IEventDetails => {
         return {
@@ -41,6 +54,13 @@ export const queryEvents = async (query: IQuery, token: IAccessToken) => {
     });
 }
 
+/**
+ * Get the details for one specific event
+ * @async
+ * @param {string} id The id of the event to look up
+ * @param {IAccessToken} token An authorisation token
+ * @returns {Promise<IEventDetails>} 
+ */
 export const getEventDetails = async (id: string, token: IAccessToken) => {
     const response = await apiRequest('POST', '/events/details', { id }, token);
     return {

@@ -15,10 +15,6 @@ webpush.setVapidDetails(
     vapidKeys.privateKey
 );
 
-export interface PushMessage {
-    title: string;
-}
-
 export const subscribe = async (user: User, subscription: PushSubscription) => {
     await schema.push.subscribe(subscription);
 }

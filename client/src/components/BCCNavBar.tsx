@@ -29,12 +29,20 @@ import Logo from './../resources/Logo';
 interface IProps extends RouteComponentProps<any,any> {}
 
 interface IState {
+    /** Whether the menu is open */
     isOpen: boolean;
+    /** The name of the logged in user */
     userFullName: string;
+    /** Whether the logged in user is an admin */
     userIsAdmin: boolean;
+    /** The term in the search box */
     search: string;
 }
 
+/**
+ * BCCNavBar
+ * Renders the navigation bar and dropdown
+ */
 class BCCNavbar extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -103,21 +111,32 @@ class BCCNavbar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
+        // Listen for user detail updates
         user.events.addEventListener('update', this.userEventListener);
     }
 
     public componentWillUnmount() {
+        // Remove user detail update listener
         user.events.removeEventListener('update', this.userEventListener);
     }
 
+    /**
+     * Toggle the menu open state
+     */
     private toggle() {
         this.setState({ isOpen: !this.state.isOpen });
     }
 
+    /**
+     * Log out the user
+     */
     private logout() {
         auth.logout();
     }
 
+    /**
+     * Update user details
+     */
     private userEventListener() {
         this.setState({ 
             userFullName: user.getUser().fullName,
@@ -125,10 +144,16 @@ class BCCNavbar extends React.Component<IProps, IState> {
         });
     }
 
+    /**
+     * Change the search term
+     */
     private handleSearchChange(search: string) {
         this.setState({ search });
     }
 
+    /**
+     * Navigate to search page
+     */
     private handleSearchClick() {
         this.props.history.push('/s/' + encodeURIComponent(this.state.search));
     }

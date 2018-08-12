@@ -16,18 +16,29 @@ BigCalendar.momentLocalizer(moment);
 export type View = 'day' | 'week' | 'month';
 
 interface IProps {
+    /** The filter to apply. Arbitrary user input */
     filter: string;
+    /** The span of time to display */
     view: View;
+    /** The date to center on */
     date: Date;
+    /** Callback for when a view change is requested */
     onViewChange: (view: View) => void;
+    /** Callback for when a date change is requested */
     onDateChange: (date: Date) => void;
+    /** Callback for when an event is clicked for more details */
     onEventClick: (event: api.IEventDetails) => void;
 }
 
 interface IState {
+    /** A list of events to display */
     events: api.IEventDetails[];
 }
 
+/**
+ * BCCBigCalendar
+ * Renders the main calendar display
+ */
 class BCCBigCalendar extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
@@ -36,7 +47,7 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
             events: []
         }
 
-        this.handleSubscriptionUpdate = this.handleSubscriptionUpdate.bind(this);
+        this.updateEvents = this.updateEvents.bind(this);
     }
 
     public render() {
@@ -48,6 +59,8 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
                 <BigCalendar
                     events={ events }
                     titleAccessor={ (event) => {
+                        // Format the title in the form
+                        // <title> - <room> - <teacher>
                         const details = [];
                         details.push(event.title);
                         if (event.locationId) {
@@ -57,6 +70,7 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
                         return details.join(' - ');
                     }}
                     eventPropGetter={ (event: api.IEventDetails, start: Date, end: Date, isSelected: boolean) => {
+                        // Add styles for cancelled or changed events
                         return {
                             style: {
                                 backgroundColor: event.cancelled ? '#7BADD6' : event.hasChanged ? '#D0585D' : undefined,
@@ -77,13 +91,16 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
 
                     formats={{
                         dayFormat: 'ddd DD/MM',
-                        eventTimeRangeFormat: ((range: { start: Date, end: Date }) => range.start.toLocaleString('en-au', { hour12: false, hour: '2-digit', minute: '2-digit'})) as any
+                        eventTimeRangeFormat: ((range: { start: Date, end: Date }) => {
+                            // Format the event time display to only show the start time in 24 time
+                            return range.start.toLocaleString('en-au', { hour12: false, hour: '2-digit', minute: '2-digit'})
+                        }) as any
                     }}
 
                     views={[ 'month', 'week', 'day' ]}
                     drilldownView='day'
-                    min={ new Date(0, 0, 0, 8) }
-                    max={ new Date(0, 0, 0, 16) }
+                    min={ new Date(0, 0, 0, 8) /* Limit the calendar to 8am */ }
+                    max={ new Date(0, 0, 0, 16) /* Limit the calendar to 4pm */ }
                     toolbar={ false }
                     popup={ true }
                 />
@@ -92,29 +109,38 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
-        subscriptions.events.addEventListener('subscribed', this.handleSubscriptionUpdate);
-        subscriptions.events.addEventListener('unsubscribed', this.handleSubscriptionUpdate);
+        // Listen for event subscription changes
+        // Update the shown events when subscriptions change
+        subscriptions.events.addEventListener('subscribed', this.updateEvents);
+        subscriptions.events.addEventListener('unsubscribed', this.updateEvents);
 
         this.updateEvents();
     }
 
     public componentWillUnmount() {
-        subscriptions.events.removeEventListener('subscribed', this.handleSubscriptionUpdate);
-        subscriptions.events.removeEventListener('unsubscribed', this.handleSubscriptionUpdate);
+        // Remove subscription update listeners
+        subscriptions.events.removeEventListener('subscribed', this.updateEvents);
+        subscriptions.events.removeEventListener('unsubscribed', this.updateEvents);
     }
 
     public async componentDidUpdate(prevProps: IProps) {
+        // Check if a change is made that requires new events to be loaded
         if (this.props.filter !== prevProps.filter || this.props.date !== prevProps.date || this.props.view !== prevProps.view) {
             this.updateEvents();
         }
     }
 
+    /**
+     * Perform a query and update the events shown
+     */
     private async updateEvents() {
         if (auth.isAuthenticated()) {
             const { date, view } = this.props
-            const viewStart = dateMath.subtract(dateMath.startOf(date, view), 0, view);
-            const viewEnd = dateMath.add(dateMath.endOf(date, view), 0, view);
+            // Calculate the start and end dates that are currently being shown
+            const viewStart = dateMath.startOf(date, view)
+            const viewEnd = dateMath.endOf(date, view)
 
+            // Restrict the query to the current view
             const query = filterToQuery(this.props.filter);
             query.after = dateMath.max(viewStart, query.after || viewStart);
             query.before = dateMath.min(viewEnd, query.before || viewEnd);
@@ -122,10 +148,6 @@ class BCCBigCalendar extends React.Component<IProps, IState> {
             const events = await api.queryEvents(query, auth.getToken()!);
             this.setState({ events });
         }
-    }
-
-    private handleSubscriptionUpdate() {
-        this.updateEvents();
     }
 }
 

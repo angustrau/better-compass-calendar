@@ -4,6 +4,9 @@ import {
     ListGroupItem
 } from 'reactstrap';
 
+/**
+ * An option in the autocomplete list
+ */
 export interface IAutocompleteListOption {
     title: string;
     subtitle: string;
@@ -11,9 +14,14 @@ export interface IAutocompleteListOption {
 }
 
 interface IProps {
+    /** A list of options to search through */
     options: IAutocompleteListOption[];
 }
 
+/**
+ * AutocompleteList
+ * Renders a list of items for autocomplete
+ */
 class AutocompleteList extends React.Component<IProps, object> {
     public render() {
         const { options } = this.props;

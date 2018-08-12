@@ -6,6 +6,9 @@ export interface IToken {
     data: any
 }
 
+/**
+ * Validate and parse an inputted date
+ */
 const parseDate = (dateString: string) => {
     try {
         const [year, month, date] = dateString.split('-');
@@ -15,12 +18,18 @@ const parseDate = (dateString: string) => {
     }
 }
 
+/**
+ * Validate and parse a user defined filter into a query
+ */
 const filterToQuery = (filter: string): IQuery => {
+    // Split the filter into tokens
     const tokens = filter.trim()
     .split(' ')
     .map((word): IToken => {
         const token = word.split(':');
 
+        // Special case for the  "subscribed" token
+        // It does not have a parameter
         if (token[0] === 'subscribed') {
             return {
                 type: 'subscribed',
@@ -28,6 +37,7 @@ const filterToQuery = (filter: string): IQuery => {
             }
         }
 
+        // If a token does not have a parameter, treat it as a keyword
         if (!token[1]) {
             return {
                 type: 'keyword',
@@ -35,6 +45,7 @@ const filterToQuery = (filter: string): IQuery => {
             }
         }
 
+        // Parse each of the different token types
         const date = parseDate(token[1]);
         switch (token[0]) {
             case 'before':
@@ -82,6 +93,7 @@ const filterToQuery = (filter: string): IQuery => {
     let after: Date | undefined;
     let before: Date | undefined;
     let subscribedUserId: number | undefined;
+    // Iterate through the tokens and find the intersection of all of them
     tokens.forEach((token) => {
         switch (token.type) {
             case 'keyword':
@@ -122,6 +134,7 @@ const filterToQuery = (filter: string): IQuery => {
         }
     });
 
+    // Return the intersection of all tokens as a query
     return {
         keywords,
         title,

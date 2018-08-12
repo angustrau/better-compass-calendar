@@ -19,11 +19,18 @@ import './LoginRoute.css';
 import Logo from '../resources/Logo';
 
 interface IState {
+    /** Whether the client is currently logging in */
     loggingIn: boolean;
+    /** Whether the login attempt will take a while */
     slowLogin: boolean;
+    /** Whether the login attempt was unsuccessful */
     invalidUserPass: boolean;
 }
 
+/**
+ * LoginRoute
+ * Renders the login screen
+ */
 class LoginRoute extends React.Component<object, IState> {
     private usernameInput: HTMLInputElement;
     private passwordInput: HTMLInputElement;
@@ -45,6 +52,7 @@ class LoginRoute extends React.Component<object, IState> {
     }
 
     public render() {
+        // Redirect to main screen if user is already logged in
         if (auth.isAuthenticated()) {
             return <Redirect push={true} to='/' />
         }
@@ -95,6 +103,8 @@ class LoginRoute extends React.Component<object, IState> {
     }
 
     private renderLoggingIn() {
+        // Log in times are usually 30+ seconds for first login and < 5 seconds for subsequent logins
+        // After 8 seconds assume the server is fetching events and wil take 30+ seconds, so show the message
         setTimeout(() => {
             this.setState({ slowLogin: true });
         }, 8000);

@@ -41,11 +41,16 @@ interface IState {
     showingEventId: string | null;
 }
 
+/**
+ * SearchRoute
+ * Renders the search screen
+ */
 class SearchRoute extends React.Component<IProps, IState> {
     constructor(props: IProps) {
         super(props);
 
         this.state =  {
+            // Get the search term from the url
             searchTerm: decodeURIComponent(this.props.match.params.search || ''),
             orderBy: 'relevance',
             results: [],
@@ -62,6 +67,8 @@ class SearchRoute extends React.Component<IProps, IState> {
 
     public render() {
         const { searchTerm, orderBy, results, limit, showingEventId } = this.state;
+        // Limit the number of results shown to prevent the browser from being 
+        // overloaded by rendering too many nodes
         const shownResults = results.slice(0, Math.min(results.length, limit) - 1);
 
         return (
@@ -86,6 +93,7 @@ class SearchRoute extends React.Component<IProps, IState> {
                     </Row>
                     <Row>
                         { shownResults.map((event, key) => {
+                            // Format the date and time of the event
                             const date = event.startTime.toLocaleString('en-au', { day: '2-digit', month: 'long' });
                             const startTime = event.startTime.toLocaleString('en-au', { hour: '2-digit', minute: '2-digit' });
 
@@ -127,6 +135,7 @@ class SearchRoute extends React.Component<IProps, IState> {
     }
 
     public componentDidMount() {
+        // When this component is loaded, make the query
         this.search();
     }
 
@@ -135,7 +144,9 @@ class SearchRoute extends React.Component<IProps, IState> {
     }
 
     private handleSearchClick() {
+        // Update the url to reflect the query
         this.props.history.push('/s/' + encodeURIComponent(this.state.searchTerm));
+        
         this.search();
     }
 
@@ -144,10 +155,12 @@ class SearchRoute extends React.Component<IProps, IState> {
     }
 
     private handleMoreClick() {
+        // Increase the number of items shown by 25 whenever "show more" is pressed
         this.setState({ limit: this.state.limit + 25 });
     }
 
     private handleDetailsClick(event: api.IEventDetails) {
+        // Open a popup with the details of the event when more details is clicked
         this.setState({ showingEventId: event.id });
     }
 

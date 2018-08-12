@@ -15,32 +15,31 @@ import * as user from '../user';
 import * as admin from './../admin';
 
 interface IRouterProps {
+    /** The currently being shown */
     tab?: string
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
 
-interface IState {
-    activeTab: string;
-}
-
-class AdminRoute extends React.Component<IProps, IState> {
+/**
+ * AdminRoute
+ * Renders the administration page
+ */
+class AdminRoute extends React.Component<IProps, object> {
     constructor(props: any) {
         super(props);
-
-        this.state = {
-            activeTab: this.props.match.params.tab || 'Stats'
-        }
 
         this.handleSendPush = this.handleSendPush.bind(this);
         this.handleRunSQL = this.handleRunSQL.bind(this);
     }
 
     public render() {
-
+        // Check that the user is authorised
         if (!user.getUser().isAdmin) {
             return <Redirect push={true} to='/' />
         }
+
+        const tab = this.props.match.params.tab || 'Stats';
 
         return (
             <div>
@@ -51,7 +50,7 @@ class AdminRoute extends React.Component<IProps, IState> {
                         { this.renderTabLink('SQL') }
                         { this.renderTabLink('Push') }
                     </Nav>
-                    <TabContent activeTab={ this.state.activeTab }>
+                    <TabContent activeTab={ tab }>
                         <TabPane tabId='Stats'>
                             <BCCAdminStats />
                         </TabPane>
@@ -75,10 +74,11 @@ class AdminRoute extends React.Component<IProps, IState> {
     }
 
     private renderTabLink(name: string) {
+        const tab = this.props.match.params.tab || 'Stats';
         return (
             <NavItem>
                 <NavLink
-                    className={ this.state.activeTab === name ? 'active' : '' }
+                    className={ tab === name ? 'active' : '' }
                     onClick={ () => this.toggleTab(name) }
                 >
                     { name }
@@ -87,17 +87,25 @@ class AdminRoute extends React.Component<IProps, IState> {
         );
     }
     
+    /**
+     * Switch to a tab
+     */
     private toggleTab(name: string) {
-        this.setState({ activeTab: name });
         this.props.history.push('/admin/' + name);
     }
 
+    /**
+     * Send a push notification to a user
+     */
     private handleSendPush() {
         const userIdInput = document.getElementById('AdminRoute-Push-UserID') as HTMLInputElement;
         const dataInput = document.getElementById('AdminRoute-Push-Data') as HTMLInputElement;
         admin.sendPush(parseInt(userIdInput.value, 10), JSON.parse(dataInput.value));
     }
 
+    /**
+     * Run an arbitrary SQL statement against the database and display the result
+     */
     private async handleRunSQL() {
         const queryInput = document.getElementById('AdminRoute-SQL-Query') as HTMLInputElement;
         const resultInput = document.getElementById('AdminRoute-SQL-Result') as HTMLInputElement;

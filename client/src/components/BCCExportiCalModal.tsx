@@ -12,15 +12,23 @@ import {
 import config from './../config';
 
 interface IProps {
+    /** Whether the modal is shown */
     isOpen: boolean;
+    /** The current filter applied */
     filter: string;
+    /** Callback to close the modal */
     onClose: () => void;
 }
 
+/**
+ * BCCExportiCalModal
+ * Renders a modal with iCal export information
+ */
 class BCCExportiCalModal extends React.Component<IProps, object> {
     public render() {
         const { isOpen, filter, onClose } = this.props;
 
+        // Construct url to iCal API enpoint
         const url = 'webcal://' + config.site.hostname + '/api/ical/' + encodeURIComponent(filter) + '/schedule.ics';
 
         return (
@@ -43,6 +51,9 @@ class BCCExportiCalModal extends React.Component<IProps, object> {
         );
     }
 
+    /**
+     * Copy the iCal URL to the clipboard
+     */
     private copy() {
         try {
             const inputArea = document.querySelector('.BCCExportiCalModal-url') as HTMLInputElement;
@@ -53,9 +64,7 @@ class BCCExportiCalModal extends React.Component<IProps, object> {
             inputArea.setAttribute('disabled', 'true');
         } catch (error) {
             console.log(error);
-            return;
         }
-        
     }
 }
 

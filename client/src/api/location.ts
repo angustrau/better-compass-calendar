@@ -7,13 +7,12 @@ export interface ILocationDetails {
     shortName: string;
 }
 
-export const getLocationDetails = async (id: number, token: IAccessToken) => {
-    const response = await apiRequest('POST', '/location/details', {
-        id
-    }, token);
-    return response as ILocationDetails;
-}
-
+/**
+ * Get a list of all locations
+ * @async
+ * @param {IAccessToken} token An authorisation token
+ * @returns {Promise<ILocationDetails[]>} 
+ */
 export const getAllLocations = async (token: IAccessToken) => {
     const response = await apiRequest('GET', '/location/all', null, token);
     return response.locations as ILocationDetails[];

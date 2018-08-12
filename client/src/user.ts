@@ -5,6 +5,7 @@ import CustomEventTarget from './utils/CustomEventTarget';
 
 export const events = new CustomEventTarget();
 
+// Set up default user details
 let user: api.IUserDetails = {
     id: 0,
     displayCode: '',
@@ -14,6 +15,9 @@ let user: api.IUserDetails = {
     isAdmin: false
 };
 
+/**
+ * Refresh user details
+ */
 const updateUserDetails = async () => {
     if (auth.isAuthenticated()) {
         user = await api.getUserDetails(auth.getToken()!);
@@ -21,6 +25,9 @@ const updateUserDetails = async () => {
     }
 }
 
+/**
+ * Refresh the list of manager details
+ */
 const managers: { [id: number]: api.IUserDetails } = {};
 const updateManagers = async () => {
     if (auth.isAuthenticated()) {
@@ -38,13 +45,15 @@ export const init = async () => {
             updateManagers()
         ]);
     });
-    // updateUserDetails();
-    // updateManagers();
 }
 
 export const getUser = () => user;
 export const getAllManagers = () => Object.keys(managers).map((k): api.IUserDetails => managers[k]);
 
+/**
+ * Find manager details by id
+ * @param id 
+ */
 export const getManager = (id: number) => {
     return managers[id] || {
         id: 0,

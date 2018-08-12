@@ -15,10 +15,16 @@ import * as user from './../user';
 import './AccountSettingsRoute.css';
 
 interface IState {
+    /** Details of the logged in user */
     userDetails: api.IUserDetails,
+    /** A list of devices with push enabled */
     pushSubscriptions: api.IPushSubscription[]
 }
 
+/**
+ * AccountSettingsRoute
+ * Renders the account settings screen
+ */
 class AccountSettingsRoute extends React.Component<object, IState> {
     constructor(props: any) {
         super(props);
@@ -87,8 +93,9 @@ class AccountSettingsRoute extends React.Component<object, IState> {
     }
 
     public async componentDidMount() {
+        // Listen for user detail updates
         user.events.addEventListener('update', this.updateUserDetails);
-
+        // Get a list of current push subscriptions
         this.setState({ pushSubscriptions: await api.getPushSubscriptions(auth.getToken()!) });
     }
 
@@ -96,15 +103,26 @@ class AccountSettingsRoute extends React.Component<object, IState> {
         user.events.removeEventListener('update', this.updateUserDetails);
     }
 
+    /**
+     * Called when user details change
+     */
     private updateUserDetails() {
         this.setState({ userDetails: user.getUser() });
     }
 
+    /**
+     * Disable push for a device
+     */
     private async handlePushUnsubscribe(subscription: api.IPushSubscription) {
+        // Tell server to remove a device
         await api.pushUnsubscribe(subscription, auth.getToken()!);
+        // Remove the device from the displayed list
         this.setState({ pushSubscriptions: this.state.pushSubscriptions.filter(x => x !== subscription) });
     }
 
+    /**
+     * Delete the user's account
+     */
     private handleDeleteAccount() {
         const confirmed = window.confirm('Are you sure you would like to delete your account?');
         if (confirmed) {

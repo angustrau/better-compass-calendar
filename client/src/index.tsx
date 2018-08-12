@@ -11,6 +11,7 @@ import registerServiceWorker from './registerServiceWorker';
 import * as subscriptions from './subscriptions';
 import * as user from './user';
 
+// Initialise modules
 auth.init();
 user.init();
 location.init();
@@ -19,6 +20,7 @@ push.init();
 
 auth.init()
 .then(() => {
+	// After initialisation, render the app
 	ReactDOM.render(
 		<App />,
 		document.getElementById('root') as HTMLElement

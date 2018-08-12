@@ -8,12 +8,15 @@ import {
 import './App.css';
 import * as auth from './auth';
 import * as routes from './routes';
-import * as user from './user';
-
 interface IState {
 	authenticated: boolean;
 }
 
+/**
+ * App
+ * The main entrypoint into the application
+ * Provides the router
+ */
 class App extends React.Component<object, IState> {
 	constructor(props: any) {
 		super(props);
@@ -26,6 +29,7 @@ class App extends React.Component<object, IState> {
 	}
 
 	public componentDidMount() {
+		// Add listeners for login state
 		auth.events.addEventListener('login', () => {
 			this.setState({ authenticated: true });
 		});
@@ -48,6 +52,7 @@ class App extends React.Component<object, IState> {
 	  }
 	  
 	private renderAuthenticatedRoutes() {
+		// These routes should only be allowed if the user is authenticated
 		if (!auth.isAuthenticated()) {
 			return <Redirect push={true} to='/login' />
 		}
