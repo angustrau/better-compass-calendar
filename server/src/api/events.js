@@ -10,6 +10,9 @@ const schema = require("./../db/schema");
  */
 router.post('/query', auth.authenticate, async (req, res, next) => {
     try {
+        if (typeof (req.body) !== 'object') {
+            throw 'Invalid input';
+        }
         const query = Object.assign({}, req.body, { before: req.body.before ? new Date(req.body.before) : undefined, after: req.body.after ? new Date(req.body.after) : undefined });
         res.json({
             events: await events.query(query, req.token)
@@ -26,6 +29,9 @@ router.post('/query', auth.authenticate, async (req, res, next) => {
  */
 router.post('/details', auth.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.id || typeof (req.body.id) !== 'number') {
+            throw 'Invalid input';
+        }
         res.json(await events.getEvent(req.body.id));
     }
     catch (error) {

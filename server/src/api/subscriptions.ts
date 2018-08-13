@@ -22,6 +22,10 @@ router.get('/', auth.authenticate, async (req, res, next) => {
  */
 router.post('/subscribe', auth.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.activity || typeof(req.body.activity) !== 'number') {
+            throw 'Invalid input';
+        }
+
         await subscriptions.subscribe(req.user, await activities.getActivity(req.body.activity));
         res.json({ success: true });
     } catch (error) {
@@ -35,6 +39,10 @@ router.post('/subscribe', auth.authenticate, async (req, res, next) => {
  */
 router.post('/unsubscribe', auth.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.activity || typeof(req.body.activity) !== 'number') {
+            throw 'Invalid input';
+        }
+        
         await subscriptions.unsubscribe(req.user, await activities.getActivity(req.body.activity));
         res.json({ success: true });
     } catch (error) {

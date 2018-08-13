@@ -9,6 +9,9 @@ const admin = require("./../admin");
  */
 router.post('/sendpush', auth.authenticate, admin.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.userId || typeof (req.body.userId) !== 'number' || !req.body.data) {
+            throw 'Invalid push payload';
+        }
         await admin.sendPush(req.body.userId, req.body.data);
         res.json({ success: true });
     }
@@ -22,6 +25,9 @@ router.post('/sendpush', auth.authenticate, admin.authenticate, async (req, res,
  */
 router.post('/sql', auth.authenticate, admin.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.query || typeof (req.body.query) !== 'string') {
+            throw 'Invalid query';
+        }
         res.json({ result: await admin.runSQL(req.body.query) });
     }
     catch (error) {

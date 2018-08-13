@@ -22,6 +22,9 @@ router.post('/subscribe', auth.authenticate, async (req, res, next) => {
  */
 router.post('/unsubscribe', auth.authenticate, async (req, res, next) => {
     try {
+        if (!req.body || typeof (req.body) !== 'object') {
+            throw 'Invalid input';
+        }
         push.unsubscribe(req.user, req.body);
         res.json({ success: true });
     }

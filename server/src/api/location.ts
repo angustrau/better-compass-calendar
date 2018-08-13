@@ -9,6 +9,10 @@ import location = require('./../location');
  */
 router.post('/details', auth.authenticate, async (req, res, next) => {
     try {
+        if (!req.body.id || typeof(req.body.id) !== 'number') {
+            throw 'Invalid input';
+        }
+
         res.json(await location.getLocation(req.body.id));
     } catch (error) {
         next(error);
